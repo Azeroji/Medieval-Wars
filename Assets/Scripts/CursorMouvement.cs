@@ -7,31 +7,34 @@ public class CursorMouvement : MonoBehaviour
   // [SerializeField] private Rigidbody2D cursorRb;
   // private float speed = 5f;
   // Start is called before the first frame update
-  Vector3 newPosition;
+  Vector3 cursorPosition;
+  private int Layermask;
+  private int layerNumber = 6;
+  private UnitController selectedUnit = null;
   void Start()
   {
-    newPosition = transform.position;
+    cursorPosition = transform.position;
+    Layermask = 1 << layerNumber;
 
   }
 
-  // Update is called once per frame
-  void Update()
+  public void cursorMouvement()
   {
     if (Input.GetKeyDown(KeyCode.LeftArrow))
     {
 
-      if (newPosition.x > -7.51f) //f for float
+      if (cursorPosition.x > -7.51f) //f for float
       {
-        newPosition.x -= 1;
+        cursorPosition.x -= 1;
 
       }
     }
     else if (Input.GetKeyDown(KeyCode.RightArrow))
     {
 
-      if (newPosition.x < 7.49f)
+      if (cursorPosition.x < 7.49f)
       {
-        newPosition.x += 1;
+        cursorPosition.x += 1;
 
       }
     }
@@ -39,9 +42,9 @@ public class CursorMouvement : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.DownArrow))
     {
 
-      if (newPosition.y > -3.82f)
+      if (cursorPosition.y > -3.82f)
       {
-        newPosition.y -= 1;
+        cursorPosition.y -= 1;
 
       }
 
@@ -49,16 +52,78 @@ public class CursorMouvement : MonoBehaviour
     else if (Input.GetKeyDown(KeyCode.UpArrow))
     {
 
-      if (newPosition.y < 4.18f)
+      if (cursorPosition.y < 4.18f)
       {
-        newPosition.y += 1;
+        cursorPosition.y += 1;
       }
     }
 
-    transform.position = newPosition;
+    transform.position = cursorPosition;
   }
 
-  // cursorRb.velocity = new Vector2(directionx * speed, directiony * speed);
+  public void selectUnit(UnitController unit)
+  {
+
+    // selectedUnit.setisSelected(true);
+
+    if (selectedUnit == unit) // toggle purpose
+    {
+      deselectUnit();
+    }
+    else
+    {
+      deselectUnit(); // deselect the previous unit if there is any
+      selectedUnit = unit;
+      selectedUnit.transform.localScale = new Vector3(1, 1, 1);
+
+    }
+
+
+  }
+
+  public void deselectUnit()
+  {
+    if (selectedUnit != null)
+    {
+      selectedUnit.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f); // return to its initial state
+      selectedUnit = null;
+    }
+    // selectedUnit.setisSelected(false);
+
+  }
+
+  public void playerSelection()
+  {
+
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+      // Convert cursor position from world space to screen space
+      Vector3 screenPoint = Camera.main.WorldToScreenPoint(cursorPosition);
+      Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, Layermask); // whenever there is  collision between the cursor and the objects that are in the layer (playersLayer) and a click on space button, hit will be true
+      if (hit)
+      {
+
+        selectUnit(hit.collider.gameObject.GetComponent<UnitController>());
+
+      }
+      else
+      {
+        deselectUnit();
+      }
+    }
+  }
+
+
+
+  // Update is called once per frame
+  void Update()
+  {
+    cursorMouvement();
+    playerSelection();
+
+  }
+
 
 
 }

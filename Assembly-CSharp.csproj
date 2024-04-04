@@ -72,6 +72,7 @@
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\MinAttribute.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_HorseSpriteList.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_AnimationController.cs" />
+    <Compile Include="Assets\Scripts\UnitController.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_PreviewItem.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SpriteSyncManager.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SPUM_SpriteEditManager.cs" />
