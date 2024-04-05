@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{F4DFFB39-756E-1950-F141-9A1E1FE2E160}</ProjectGuid>
+    <ProjectGuid>{11340539-9BE3-F72D-91FE-83C11CE72E29}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -80,9 +80,11 @@
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Gif\GifFrame.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\ReflectionUtils.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_Manager.cs" />
+    <Compile Include="Assets\Scripts\Terrain.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Worker.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SpriteSync.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Gif\NeuQuant.cs" />
+    <Compile Include="Assets\Scripts\TilemapGenerator.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_PackageButton.cs" />
     <Compile Include="Assets\SPUM\Sample\Script\PlayerObj.cs" />
     <Compile Include="Assets\SPUM\Script\Ect\SpritePos.cs" />
