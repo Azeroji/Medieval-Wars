@@ -10,7 +10,6 @@ public class TerrainMap {
 }
 public class TilemapGenerator : MonoBehaviour {
     public TerrainMap terrainMap;
-    public int[] mat;
     public Tilemap tilemap;
     public TileBase[] tiles; // Array of tiles corresponding to different terrain types
     // Method to generate the Tilemap
