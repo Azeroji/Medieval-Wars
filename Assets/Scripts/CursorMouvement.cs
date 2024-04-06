@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static ArrowTranslator;
 
 public class CursorMouvement : MonoBehaviour
 {
@@ -22,13 +23,17 @@ public class CursorMouvement : MonoBehaviour
 
   public float speed = 4f;
   private RangeFinder rangeFinder;
+  private ArrowTranslator arrowTranslator;
   private List<OverlayTileController> inRangeTiles = new List<OverlayTileController>();
+
+  private bool isMoving = false;
   void Start()
   {
     cursorPosition = transform.position;
     Layermask = 1 << layerNumber;
     pathFinder = new PathFinder();
     rangeFinder = new RangeFinder();
+    arrowTranslator = new ArrowTranslator();
 
   }
 
@@ -180,6 +185,25 @@ public class CursorMouvement : MonoBehaviour
       GameObject overlayTile = focusedTile.Value.collider.gameObject;
       // transform.position = overlayTile.transform.position;
       // gameObject.GetComponent<SpriteRenderer>().sortingLayerID = overlayTile.GetComponent<SpriteRenderer>().sortingLayerID;
+
+      if (inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) && !isMoving)
+      {
+        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); // Pass searchableTiles argument
+        foreach (var item in inRangeTiles)
+        {
+          item.setArrowSprite(ArrowDirection.None);
+        }
+        for (int i = 0; i < path.Count; i++)
+        {
+          var previsousTile = i > 0 ? path[i - 1] : unit.activeTile;
+          var futureTile = i < path.Count - 1 ? path[i + 1] : null;
+          var arrowDir = arrowTranslator.TranslateDirection(previsousTile, path[i], futureTile);
+          path[i].setArrowSprite(arrowDir);
+
+        }
+      }
+
+
       if (Input.GetKeyDown(KeyCode.Space))
       {
         // Debug.Log("overlaytile : "+overlayTile);
@@ -192,7 +216,7 @@ public class CursorMouvement : MonoBehaviour
         }
         else
         {
-          path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); // Pass searchableTiles argument
+          isMoving = true;
         }
 
 
@@ -200,7 +224,7 @@ public class CursorMouvement : MonoBehaviour
 
       }
     }
-    if (path != null && path.Count > 0)
+    if (path != null && path.Count > 0 && isMoving)
     {
       moveAlongPath();
     }
@@ -219,6 +243,7 @@ public class CursorMouvement : MonoBehaviour
     if (path.Count == 0)
     {
       getinRangeTiles();
+      isMoving = false;
 
     }
 
