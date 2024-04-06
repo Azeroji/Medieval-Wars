@@ -7,7 +7,7 @@ public class PathFinder
 {
   // Start is called before the first frame update
 
-  public List<OverlayTileController> findPath(OverlayTileController startNode, OverlayTileController endNode)
+  public List<OverlayTileController> findPath(OverlayTileController startNode, OverlayTileController endNode , List<OverlayTileController> searchableTiles)
   {
     List<OverlayTileController> openList = new List<OverlayTileController>();
     List<OverlayTileController> closedList = new List<OverlayTileController>();
@@ -28,7 +28,7 @@ public class PathFinder
       {
         return getfinishedlist(startNode, endNode);
       }
-      var neighbourstiles = getNeighbourTiles(currentNode);
+      var neighbourstiles = MapManager.Instance.getNeighbourTiles(currentNode , searchableTiles);
       foreach (OverlayTileController neighbour in (List<OverlayTileController>)neighbourstiles)
       {
         if (neighbour.isblocked || closedList.Contains(neighbour))
@@ -70,44 +70,44 @@ public class PathFinder
     finishedlist.Reverse();
     return finishedlist;
   }
-  public object getNeighbourTiles(OverlayTileController currentoverlayTile)
-  {
-    var map = MapManager.Instance.map;
-    List<OverlayTileController> neighbours = new List<OverlayTileController>();
-    //top
-    Vector2Int locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y + 1);
+  // public object getNeighbourTiles(OverlayTileController currentoverlayTile)
+  // {
+  //   var map = MapManager.Instance.map;
+  //   List<OverlayTileController> neighbours = new List<OverlayTileController>();
+  //   //top
+  //   Vector2Int locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y + 1);
 
-    if (map.ContainsKey(locationTocheck))
-    {
-      neighbours.Add(map[locationTocheck]);
-    }
+  //   if (map.ContainsKey(locationTocheck))
+  //   {
+  //     neighbours.Add(map[locationTocheck]);
+  //   }
 
-    //bottom
-    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y - 1);
+  //   //bottom
+  //   locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y - 1);
 
-    if (map.ContainsKey(locationTocheck))
-    {
-      neighbours.Add(map[locationTocheck]);
-    }
+  //   if (map.ContainsKey(locationTocheck))
+  //   {
+  //     neighbours.Add(map[locationTocheck]);
+  //   }
 
 
-    //right
+  //   //right
 
-    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x + 1, currentoverlayTile.gridlocation.y);
+  //   locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x + 1, currentoverlayTile.gridlocation.y);
 
-    if (map.ContainsKey(locationTocheck))
-    {
-      neighbours.Add(map[locationTocheck]);
-    }
-    //left
-    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x - 1, currentoverlayTile.gridlocation.y);
+  //   if (map.ContainsKey(locationTocheck))
+  //   {
+  //     neighbours.Add(map[locationTocheck]);
+  //   }
+  //   //left
+  //   locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x - 1, currentoverlayTile.gridlocation.y);
 
-    if (map.ContainsKey(locationTocheck))
-    {
-      neighbours.Add(map[locationTocheck]);
-    }
+  //   if (map.ContainsKey(locationTocheck))
+  //   {
+  //     neighbours.Add(map[locationTocheck]);
+  //   }
 
-    return neighbours;
+  //   return neighbours;
 
-  }
+  // }
 }

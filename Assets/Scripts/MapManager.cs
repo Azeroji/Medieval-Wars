@@ -67,6 +67,60 @@ public class MapManager : MonoBehaviour
     }
 
   }
+  public object getNeighbourTiles(OverlayTileController currentoverlayTile, List<OverlayTileController> searchabletiles)
+  {
+    var map = MapManager.Instance.map;
+    Dictionary<Vector2Int, OverlayTileController> tiletosearch = new Dictionary<Vector2Int, OverlayTileController>();
+    if (searchabletiles.Count > 0)
+    {
+      foreach (var tile in searchabletiles)
+      {
+        tiletosearch.Add(tile.grid2Dlocation, tile);
+      }
+    }
+    else
+    {
+      tiletosearch = map;
+    }
+
+
+    List<OverlayTileController> neighbours = new List<OverlayTileController>();
+    //top
+    Vector2Int locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y + 1);
+
+    if (tiletosearch.ContainsKey(locationTocheck))
+    {
+      neighbours.Add(tiletosearch[locationTocheck]);
+    }
+
+    //bottom
+    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x, currentoverlayTile.gridlocation.y - 1);
+
+    if (tiletosearch.ContainsKey(locationTocheck))
+    {
+      neighbours.Add(tiletosearch[locationTocheck]);
+    }
+
+
+    //right
+
+    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x + 1, currentoverlayTile.gridlocation.y);
+
+    if (tiletosearch.ContainsKey(locationTocheck))
+    {
+      neighbours.Add(tiletosearch[locationTocheck]);
+    }
+    //left
+    locationTocheck = new Vector2Int(currentoverlayTile.gridlocation.x - 1, currentoverlayTile.gridlocation.y);
+
+    if (tiletosearch.ContainsKey(locationTocheck))
+    {
+      neighbours.Add(tiletosearch[locationTocheck]);
+    }
+
+    return neighbours;
+
+  }
 
   // Update is called once per frame
 }

@@ -21,11 +21,14 @@ public class CursorMouvement : MonoBehaviour
   private List<OverlayTileController> path = new List<OverlayTileController>();
 
   public float speed = 4f;
+  private RangeFinder rangeFinder;
+  private List<OverlayTileController> inRangeTiles = new List<OverlayTileController>();
   void Start()
   {
     cursorPosition = transform.position;
     Layermask = 1 << layerNumber;
     pathFinder = new PathFinder();
+    rangeFinder = new RangeFinder();
 
   }
 
@@ -185,10 +188,11 @@ public class CursorMouvement : MonoBehaviour
         {
           unit = Instantiate(unitPrefab).GetComponent<UnitController>(); // Instantiate UnitController instead of Unit
           PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
+          getinRangeTiles();
         }
         else
         {
-          path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>());
+          path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); // Pass searchableTiles argument
         }
 
 
@@ -212,6 +216,24 @@ public class CursorMouvement : MonoBehaviour
       PositionUnitOnTile(path[0]);
       path.RemoveAt(0);
     }
+    if (path.Count == 0)
+    {
+      getinRangeTiles();
 
+    }
+
+  }
+
+  private void getinRangeTiles()
+  {
+    foreach (var item in inRangeTiles)
+    {
+      item.hideTile();
+    }
+    inRangeTiles = rangeFinder.getTilesInRange(unit.activeTile, 3);
+    foreach (var item in inRangeTiles)
+    {
+      item.showTile();
+    }
   }
 }
