@@ -4,19 +4,31 @@ using UnityEngine;
 
 public class OverlayTileController : MonoBehaviour
 {
-    // Start is called before the first frame update
-  
+  // Start is called before the first frame update
 
-    // Update is called once per frame
-    void Update()
+  public int G;
+  public int H;
+  public int F { get { return G + H; } }
+  public bool isblocked;
+  public OverlayTileController previous;
+  public Vector3Int gridlocation;
+  // Update is called once per frame
+  void Update()
+  {
+    if (Input.GetKeyDown(KeyCode.Space))
     {
-        
+      hideTile();
+
     }
 
-    public void showTile(){
-      gameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
-    }
-    public void hideTile(){
-      gameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
-    }
+  }
+
+  public void showTile()
+  {
+    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+  }
+  public void hideTile()
+  {
+    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+  }
 }

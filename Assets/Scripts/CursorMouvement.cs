@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CursorMouvement : MonoBehaviour
@@ -11,11 +13,19 @@ public class CursorMouvement : MonoBehaviour
   public Vector3 cursorPosition;
   private int Layermask;
   private int layerNumber = 6;
-  private UnitController selectedUnit = null;
+  private UnitController selectedUnit = null; // later on
+  private UnitController unit;
+  public GameObject unitPrefab;
+
+  private PathFinder pathFinder;
+  private List<OverlayTileController> path = new List<OverlayTileController>();
+
+  public float speed = 4f;
   void Start()
   {
     cursorPosition = transform.position;
     Layermask = 1 << layerNumber;
+    pathFinder = new PathFinder();
 
   }
 
@@ -24,7 +34,7 @@ public class CursorMouvement : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.LeftArrow))
     {
 
-      if (cursorPosition.x > -7.51f) //f for float
+      if (cursorPosition.x > -9.51f) //f for float
       {
         cursorPosition.x -= 1;
 
@@ -33,7 +43,7 @@ public class CursorMouvement : MonoBehaviour
     else if (Input.GetKeyDown(KeyCode.RightArrow))
     {
 
-      if (cursorPosition.x < 7.49f)
+      if (cursorPosition.x < 9.49f)
       {
         cursorPosition.x += 1;
 
@@ -43,7 +53,7 @@ public class CursorMouvement : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.DownArrow))
     {
 
-      if (cursorPosition.y > -3.82f)
+      if (cursorPosition.y > -4.52f)
       {
         cursorPosition.y -= 1;
 
@@ -53,7 +63,7 @@ public class CursorMouvement : MonoBehaviour
     else if (Input.GetKeyDown(KeyCode.UpArrow))
     {
 
-      if (cursorPosition.y < 4.18f)
+      if (cursorPosition.y < 4.42f)
       {
         cursorPosition.y += 1;
       }
@@ -124,34 +134,84 @@ public class CursorMouvement : MonoBehaviour
   public RaycastHit2D? GetfocusedOnTile()
   {
     // Convert cursor position from world space to screen space
-    Vector3 screenPoint = Camera.main.ScreenToWorldPoint(cursorPosition);
-    Vector2 cursorpos2d = new Vector2(screenPoint.x, screenPoint.y);
+    // Vector3 screenPoint = Camera.main.ScreenToWorldPoint(cursorPosition);
+    Vector2 cursorpos2d = new Vector2(cursorPosition.x, cursorPosition.y);
     RaycastHit2D[] hits = Physics2D.RaycastAll(cursorpos2d, Vector2.zero); // whenever there is  collision between the cursor and the objects that are in the layer (playersLayer), hit will be true
-    if (hits.Length > 0)
+    if (hits.Length > 1)
     {
-      Debug.Log("Tile is focused");
-      return hits.OrderByDescending(i => i.collider.transform.position.z).First();
+      // Debug.Log("hits length : " + hits.Length);
+      for (int i = 0; i < hits.Length; i++)
+      {
+        // Debug.Log("Tile : " + hits[i].collider.gameObject.name);
+        if (hits[i].collider.gameObject.tag == "OverlayTile")
+        {
+          return hits[i];
+        }
+
+
+      }
+      // return hits.OrderByDescending(i => i.collider.transform.position.z).First();
+      //return hits[hits.Length - 1];
+
     }
 
     return null;
   }
 
+  private void PositionUnitOnTile(OverlayTileController overlayTile)
+  {
+    unit.transform.position = new Vector3(overlayTile.transform.position.x, overlayTile.transform.position.y + 0.0001f, 0);
+    //unit.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
+    unit.activeTile = overlayTile;
+  }
 
 
   // Update is called once per frame
-  void Update()
+  void LateUpdate()
   {
     cursorMouvement();
-    unitSelection();
+    // unitSelection();
     var focusedTile = GetfocusedOnTile();
     if (focusedTile.HasValue)
     {
       GameObject overlayTile = focusedTile.Value.collider.gameObject;
-      transform.position = overlayTile.transform.position;
-      gameObject.GetComponent<SpriteRenderer>().sortingLayerID = overlayTile.GetComponent<SpriteRenderer>().sortingLayerID;
+      // transform.position = overlayTile.transform.position;
+      // gameObject.GetComponent<SpriteRenderer>().sortingLayerID = overlayTile.GetComponent<SpriteRenderer>().sortingLayerID;
+      if (Input.GetKeyDown(KeyCode.Space))
+      {
+        // Debug.Log("overlaytile : "+overlayTile);
+        overlayTile.GetComponent<OverlayTileController>().showTile();
+        if (unit == null)
+        {
+          unit = Instantiate(unitPrefab).GetComponent<UnitController>(); // Instantiate UnitController instead of Unit
+          PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
+        }
+        else
+        {
+          path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>());
+        }
+
+
+        Debug.Log("Tile is shown");
+
+      }
     }
+    if (path != null && path.Count > 0)
+    {
+      moveAlongPath();
+    }
+
   }
 
+  private void moveAlongPath()
+  {
+    var step = speed * Time.deltaTime;
+    unit.transform.position = Vector2.MoveTowards(unit.transform.position, path[0].transform.position, step);
+    if (Vector2.Distance(unit.transform.position, path[0].transform.position) < 0.001f)
+    {
+      PositionUnitOnTile(path[0]);
+      path.RemoveAt(0);
+    }
 
-
+  }
 }

@@ -55,8 +55,8 @@ public class TilemapGenerator : MonoBehaviour
     }
     GenerateTilemap();
   //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());
-  BoundsInt bounds = tilemap.cellBounds;
-  Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
+  // BoundsInt bounds = tilemap.cellBounds;
+  // Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
   }
 
 }

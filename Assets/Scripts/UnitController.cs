@@ -21,7 +21,7 @@ public class UnitController : MonoBehaviour
   public float moveSpeed = 100f;
   public float stopDistance = 0.1f;
   // Start is called before the first frame update
-
+public OverlayTileController activeTile;
   void Start()
   {
 
@@ -33,7 +33,7 @@ public class UnitController : MonoBehaviour
     // Vector3 worldCursorPosition = Camera.main.ScreenToWorldPoint(cursorPosition);
 
     Vector3 direction = (cursorPosition - transform.position).normalized;
-    Debug.Log("direcation : "+direction);
+    Debug.Log("direcation : " + direction);
 
     Debug.Log("Unit Position Before: " + transform.position);
     // transform.Translate(direction * Time.deltaTime * moveSpeed);
@@ -49,26 +49,6 @@ public class UnitController : MonoBehaviour
     //   transform.position = cursorPosition;
     // }
   }
-  public void playerAttack()
-  {
-    if (Input.GetMouseButtonDown(1)) // right mouse button
-    {
-      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      RaycastHit hit;
-      if (Physics.Raycast(ray, out hit))
-      {
-        if (hit.collider.tag == "Enemy")
-        {
-          Debug.Log("Attack");
-        }
-      }
-    }
-  }
-  public void playerAction()
-  {
-    // unitMouvement();
-    // playerAttack();
-  }
   // Update is called once per frame
   void Update()
   {
@@ -79,7 +59,7 @@ public class UnitController : MonoBehaviour
       //Vector3 screenPoint = Camera.main.WorldToScreenPoint(cursorMouvement.cursorPosition);
       Vector3 cursorPosition = cursorMouvement.cursorPosition;
       Debug.Log("Cursor Position: " + cursorPosition);
-      unitMouvement(cursorPosition);
+      // unitMouvement(cursorPosition);
 
       // we had to call it here even though it is called in the CursorMouvement script because i dont know (ki n7itha mamchatch)
     }
