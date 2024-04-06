@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CursorMouvement : MonoBehaviour
@@ -7,7 +8,7 @@ public class CursorMouvement : MonoBehaviour
   // [SerializeField] private Rigidbody2D cursorRb;
   // private float speed = 5f;
   // Start is called before the first frame update
-  Vector3 cursorPosition;
+  public Vector3 cursorPosition;
   private int Layermask;
   private int layerNumber = 6;
   private UnitController selectedUnit = null;
@@ -92,7 +93,7 @@ public class CursorMouvement : MonoBehaviour
 
   }
 
-  public void playerSelection()
+  public void unitSelection()
   {
 
     if (Input.GetKeyDown(KeyCode.Space))
@@ -100,7 +101,7 @@ public class CursorMouvement : MonoBehaviour
       // Convert cursor position from world space to screen space
       Vector3 screenPoint = Camera.main.WorldToScreenPoint(cursorPosition);
       Ray ray = Camera.main.ScreenPointToRay(screenPoint);
-      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, Layermask); // whenever there is  collision between the cursor and the objects that are in the layer (playersLayer) and a click on space button, hit will be true
+      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, Layermask); // whenever there is  collision between the cursor and the objects that are in the layer (playersLayer), hit will be true
       if (hit)
       {
 
@@ -109,9 +110,30 @@ public class CursorMouvement : MonoBehaviour
       }
       else
       {
-        deselectUnit();
+        if (selectedUnit != null)
+        {
+
+          selectedUnit.unitMouvement(cursorPosition); // move the selected unit to the cursor position
+          deselectUnit();
+        }
+
       }
     }
+  }
+
+  public RaycastHit2D? GetfocusedOnTile()
+  {
+    // Convert cursor position from world space to screen space
+    Vector3 screenPoint = Camera.main.ScreenToWorldPoint(cursorPosition);
+    Vector2 cursorpos2d = new Vector2(screenPoint.x, screenPoint.y);
+    RaycastHit2D[] hits = Physics2D.RaycastAll(cursorpos2d, Vector2.zero); // whenever there is  collision between the cursor and the objects that are in the layer (playersLayer), hit will be true
+    if (hits.Length > 0)
+    {
+      Debug.Log("Tile is focused");
+      return hits.OrderByDescending(i => i.collider.transform.position.z).First();
+    }
+
+    return null;
   }
 
 
@@ -120,8 +142,14 @@ public class CursorMouvement : MonoBehaviour
   void Update()
   {
     cursorMouvement();
-    playerSelection();
-
+    unitSelection();
+    var focusedTile = GetfocusedOnTile();
+    if (focusedTile.HasValue)
+    {
+      GameObject overlayTile = focusedTile.Value.collider.gameObject;
+      transform.position = overlayTile.transform.position;
+      gameObject.GetComponent<SpriteRenderer>().sortingLayerID = overlayTile.GetComponent<SpriteRenderer>().sortingLayerID;
+    }
   }
 
 
