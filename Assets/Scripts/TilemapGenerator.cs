@@ -4,12 +4,18 @@ using System.IO;
 
 public class TerrainMap {
     public Terrain[,] map;
-    public TerrainMap (int x, int y) {
-        map = new Terrain[x,y];
+    public TerrainMap(int x, int y) {
+        map = new Terrain[x, y];
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                map[i, j] = new Terrain(TerrainType.Plaine, 1, 0);
+            }
+        }
     }
 }
+
 public class TilemapGenerator : MonoBehaviour {
-    public TerrainMap terrainMap;
+    public static TerrainMap terrainMap = new TerrainMap(20,10);
     public Tilemap tilemap;
     public TileBase[] tiles; // Array of tiles corresponding to different terrain types
     // Method to generate the Tilemap
@@ -29,7 +35,6 @@ public class TilemapGenerator : MonoBehaviour {
         int mapWidth = 20;
         int mapHeight = 10;
         // Initialize terrainMap with desired dimensions
-        terrainMap = new TerrainMap(20,10);
 
         string mapString = File.ReadAllText("Assets/Maps/MAP_001.map");
 
