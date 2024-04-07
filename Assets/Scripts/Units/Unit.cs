@@ -28,10 +28,11 @@ public class Unit
     public Player owner;
     public Teams team;
     public bool isPower;
-    public bool isAlive;
+    public bool isAlive = true;
 
     //Gameobject
     public GameObject unitGameObject;
+    public GameObject objectInstance;
 
     public float AttackValue ( int IndividualATK = 100 , int UniversalATK = 100 ) {
         return ( this.baseDamage * IndividualATK/100.0f * UniversalATK/100.0f );
@@ -48,7 +49,7 @@ public class Unit
     public bool IsAttackPossible ( Unit Defender ) {
         float distance = Mathf.Sqrt( Mathf.Pow( ( Defender.posx - posx ) , 2 ) + Mathf.Pow( ( Defender.posy - posy ) , 2 ) );
         if ( Mathf.Floor(distance) <= range ) {
-            return true;
+            return ( true && Defender.isAlive ) ;
         } else {
             return false;
         }
@@ -57,12 +58,17 @@ public class Unit
     public void Attack ( Unit Defender ) {
         if ( IsAttackPossible( Defender ) ) {
             Defender.hp = Defender.hp - TotalAttackDamage( Defender );
+            Debug.Log("Attack damage : "+TotalAttackDamage(Defender));
             if ( Defender.hp <= 0 ) {
-                Defender.isAlive = false;
+                Defender.Die();
             }
-        } else {
-            Debug.Log("Cannot attack defender is too far!");
         }
+    }
+
+    public void Die () {
+        isAlive = false;
+        SPUM_Prefabs spumScript = objectInstance.GetComponent<SPUM_Prefabs>();
+        DestroyObject.Detruire(objectInstance, 3.0f);
     }
 
     public void SpawnUnit(Vector2 position)
@@ -75,7 +81,7 @@ public class Unit
             if ( team == Teams.Red ) {
                 spawnRotation = Quaternion.Euler(0, 180, 0);
             }
-            GameObject objectInstance = GameObject.Instantiate(unitGameObject, position, spawnRotation);
+            objectInstance = GameObject.Instantiate(unitGameObject, position, spawnRotation);
         }
         else
         {
