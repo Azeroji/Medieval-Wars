@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{81E89DD4-EC8F-BA88-D542-8E4364364FA2}|Assembly-CSharp.csproj|c:\\users\\dell\\dropbox\\pc\\documents\\github\\medieval-wars\\assets\\scripts\\cursormouvement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{81E89DD4-EC8F-BA88-D542-8E4364364FA2}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cursormouvement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\Assets\\Scripts\\hii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\hii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CursorMouvement.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\Assets\\Scripts\\CursorMouvement.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\CursorMouvement.cs",
+              "ToolTip": "C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\Assets\\Scripts\\CursorMouvement.cs",
+              "RelativeToolTip": "Assets\\Scripts\\CursorMouvement.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-01T23:10:44.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "hii.cs",
+              "DocumentMoniker": "C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\Assets\\Scripts\\hii.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\hii.cs",
+              "ToolTip": "C:\\Users\\dell\\Dropbox\\PC\\Documents\\GitHub\\Medieval-Wars\\Assets\\Scripts\\hii.cs",
+              "RelativeToolTip": "Assets\\Scripts\\hii.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-01T11:51:56.798Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

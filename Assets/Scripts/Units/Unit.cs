@@ -1,11 +1,6 @@
 using UnityEngine;
 using System;
 
-public enum Teams {
-    Red,
-    Blue
-}
-
 public class Unit
 {
     // Variables de base de la classe Unit
@@ -23,6 +18,7 @@ public class Unit
     //Position
     public int posx;
     public int posy;
+    public bool hasPlayed = false;
 
     //Speciales
     public Player owner;
@@ -71,6 +67,47 @@ public class Unit
         DestroyObject.Detruire(objectInstance, 3.0f);
     }
 
+    public void Move(int x, int y)
+    {
+        hasPlayed = true;
+        posx = x;
+        posy = y;
+
+        // Check if the objectInstance is assigned
+        if (objectInstance != null)
+        {
+            // Change the material to transparent gray
+            SpriteRenderer renderer = objectInstance.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+            {
+                // Assign the transparent gray material to the objectInstance
+                Material transparentGrayMaterial = Resources.Load<Material>("TransparentGrayMaterial");
+                if (transparentGrayMaterial != null)
+                {
+                    renderer.material = transparentGrayMaterial;
+                    
+                    // Optional: Adjust material properties (e.g., transparency, color)
+                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Gray color with alpha
+                    renderer.material.color = grayColor;
+                }
+                else
+                {
+                    Debug.LogError("Failed to load TransparentGrayMaterial!");
+                }
+            }
+            else
+            {
+                Debug.LogError("SpriteRenderer component not found on objectInstance!");
+            }
+        }
+        else
+        {
+            Debug.LogError("objectInstance is not assigned!");
+        }
+    }
+
+
+
     public void SpawnUnit(Vector2 position)
     {
         // Check if the prefab is assigned
@@ -89,16 +126,4 @@ public class Unit
         }
     }
 
-}
-
-public class Player
-{
-    public string playerName;
-    public int playerID;
-
-    public Player(string name, int id)
-    {
-        this.playerName = name;
-        this.playerID = id;
-    }
 }

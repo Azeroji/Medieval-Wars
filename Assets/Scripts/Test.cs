@@ -11,7 +11,7 @@ public class Test : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        g1 = new Guerrier(3,4,Teams.Red);
+        g1 = new Guerrier(0,1,Teams.Red);
 
         g2 = new Lancier(4,5,Teams.Blue);
 

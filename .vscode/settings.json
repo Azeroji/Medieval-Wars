@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Medieval Wars.sln"
+    "Medieval Wars.sln=======dotnet.defaultSolution": "Medieval-Wars.sln>>>>>>>d477dba55f751881863c81be058e9403dd006ac4",
+    "dotnet.defaultSolution": "Medieval-Wars.sln"
 }

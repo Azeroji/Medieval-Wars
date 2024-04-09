@@ -123,6 +123,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &280363363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 280363365}
+  m_Layer: 0
+  m_Name: TilemapsaveLoad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &280363365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280363363}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.9617777, y: -0.2072188, z: -0.009277962}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1064892264
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,17 +492,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 986f133749ce433499ff87c0079cbe7a, type: 2}
   - {fileID: 11400000, guid: abc657edabcb50647b3ebf5317a39f99, type: 2}
   - {fileID: 11400000, guid: 184c87eeb1e90044fa6713c3df044159, type: 2}
-  - {fileID: 11400000, guid: 4a0c8671e6e2767479f4242f39479514, type: 2}
-  - {fileID: 11400000, guid: 1c09e0422b354f5499d43032f0e0d7bb, type: 2}
-  - {fileID: 11400000, guid: 98b1ad90c505e3c40b127d8f2870d3e5, type: 2}
-  - {fileID: 11400000, guid: 9adf94e342cbba64c9a6fda96282ac6d, type: 2}
-  - {fileID: 11400000, guid: 91f95a2387398e44d9525b85c06277a0, type: 2}
-  - {fileID: 11400000, guid: c7201039497294b4093d9b08b7863f40, type: 2}
-  - {fileID: 11400000, guid: b010cbfc729567145bccb348ad7307f4, type: 2}
-  - {fileID: 11400000, guid: 48cd2311f16d11341afcc9813f4c1b5b, type: 2}
-  - {fileID: 11400000, guid: bc3ca4118d9e36243b13a42ea9703366, type: 2}
-  - {fileID: 11400000, guid: ac86988d6226cf9448b382ab57027bb5, type: 2}
-  - {fileID: 11400000, guid: 315efbbfb482cf0489d33442ae304bda, type: 2}
+  - {fileID: 0}
 --- !u!4 &2057016633
 Transform:
   m_ObjectHideFlags: 0

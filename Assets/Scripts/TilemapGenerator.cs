@@ -36,19 +36,34 @@ public class TilemapGenerator : MonoBehaviour {
         int mapHeight = 10;
         // Initialize terrainMap with desired dimensions
 
-        string mapString = File.ReadAllText("Assets/Maps/MAP_001.map");
+    string mapString = File.ReadAllText("Assets/Maps/MAP_001.map");
 
-        string[] cols = mapString.Split('\n');
+    string[] cols = mapString.Split('\n');
 
-        for (int y = 0; y < mapHeight; y++) {
-            string[] rows = cols[mapHeight-y-1].Split(';');
-            for (int x = 0; x < mapWidth; x++) {
-                TerrainType type = TerrainType.Plaine;
-                System.Enum.TryParse(rows[x], true, out type);
-                terrainMap.map[x, y] = new Terrain(type, 1, 0);
-            }
-        }
-        GenerateTilemap();
+    for (int y = 0; y < mapHeight; y++)
+    {
+      string[] rows = cols[mapHeight - y - 1].Split(';');
+      for (int x = 0; x < mapWidth; x++)
+      {
+        TerrainType type = TerrainType.Plaine;
+        System.Enum.TryParse(rows[x], true, out type);
+        terrainMap.map[x, y] = new Terrain(type, 1, 0);
+      }
     }
+    terrainMap.map[3,3] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[3,9] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[3,8] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,4] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,5] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,6] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,7] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,8] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[4,9] = new Terrain(TerrainType.Montagne, 2, 0);
+
+    GenerateTilemap();
+  //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());
+  // BoundsInt bounds = tilemap.cellBounds;
+  // Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
+  }
 
 }

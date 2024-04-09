@@ -76,9 +76,12 @@
     <Compile Include="Assets\SPUM\Sample\Script\PlayerManager.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\MinAttribute.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_HorseSpriteList.cs" />
+    <Compile Include="Assets\Scripts\Movement\PathFinder.cs" />
     <Compile Include="Assets\Scripts\Units\Unit.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_AnimationController.cs" />
+    <Compile Include="Assets\Scripts\Co\Co.cs" />
     <Compile Include="Assets\Scripts\DestroyObject\DestroyObject.cs" />
+    <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_PreviewItem.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SpriteSyncManager.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SPUM_SpriteEditManager.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Assets\SPUM\Script\SPUM_Prefabs.cs" />
     <Compile Include="Assets\Scripts\Units\Catapulte.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_Button.cs" />
+    <Compile Include="Assets\Scripts\Movement\Move.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_EyeSet.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Recorder.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Gif\GifFrame.cs" />
@@ -97,19 +101,26 @@
     <Compile Include="Assets\SPUM\Script\SPUM_Manager.cs" />
     <Compile Include="Assets\Scripts\Terrain.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Worker.cs" />
+    <Compile Include="Assets\Scripts\Movement\ArrowTranslator.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SpriteSync.cs" />
-    <Compile Include="Assets\Scripts\Move.cs" />
+    <Compile Include="Assets\Scripts\Movement\CursorMouvement.cs" />
+    <Compile Include="Assets\Scripts\Movement\MapManager.cs" />
+    <Compile Include="Assets\Scripts\Movement\UnitController.cs" />
+    <Compile Include="Assets\Scripts\Movement\OverlayTileController.cs" />
     <Compile Include="Assets\Scripts\Units\Archer.cs" />
     <Compile Include="Assets\Scripts\Units\Guerrier.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Gif\NeuQuant.cs" />
+    <Compile Include="Assets\Scripts\Movement\RangeFinder.cs" />
     <Compile Include="Assets\Scripts\TilemapGenerator.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_PackageButton.cs" />
     <Compile Include="Assets\Scripts\Units\Galere.cs" />
+    <Compile Include="Assets\Scripts\Teams\Teams.cs" />
     <Compile Include="Assets\SPUM\Sample\Script\PlayerObj.cs" />
     <Compile Include="Assets\Scripts\Test.cs" />
     <Compile Include="Assets\SPUM\Script\Ect\SpritePos.cs" />
     <Compile Include="Assets\Scripts\Units\NavireDeTransport.cs" />
     <Compile Include="Assets\Scripts\Units\Belier.cs" />
+    <Compile Include="Assets\Scripts\Game\Game.cs" />
     <Compile Include="Assets\SPUM\Sprite_SheetExporter(Beta)\Script\SPUM_Exporter.cs" />
   </ItemGroup>
   <ItemGroup>
