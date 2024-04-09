@@ -210,7 +210,7 @@ public class CursorMouvement : MonoBehaviour
         overlayTile.GetComponent<OverlayTileController>().showTile();
         if (unit == null)
         {
-          unit = Instantiate(unitPrefab).GetComponent<UnitController>(); // Instantiate UnitController instead of Unit
+          unit = unitPrefab.GetComponent<UnitController>(); //we are not Instantiate UnitController instead of Unit
           PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
           getinRangeTiles();
         }

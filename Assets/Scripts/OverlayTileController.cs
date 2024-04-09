@@ -28,7 +28,7 @@ public class OverlayTileController : MonoBehaviour
 
   public void showTile()
   {
-    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, (float)0.5);
   }
   public void hideTile()
   {
@@ -50,12 +50,7 @@ public class OverlayTileController : MonoBehaviour
       arrow.color = new Color(1, 1, 1, 1);
       arrow.sprite = arrows[(int)direction];
       arrow.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
-
-
-
-
-
-
+      
       // if (direction == ArrowDirection.Up)
       // {
       //   arrow.sprite = arrows[0];
