@@ -2,8 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static ArrowTranslator;
 
 public class CursorMouvement : MonoBehaviour
@@ -25,6 +29,12 @@ public class CursorMouvement : MonoBehaviour
   private RangeFinder rangeFinder;
   private ArrowTranslator arrowTranslator;
   private List<OverlayTileController> inRangeTiles = new List<OverlayTileController>();
+
+  public Tilemap tilemap;
+
+  public GameObject image;
+  public GameObject tilename;
+  public GameObject tiledefense ; 
 
   private bool isMoving = false;
   void Start()
@@ -78,6 +88,33 @@ public class CursorMouvement : MonoBehaviour
     }
 
     transform.position = cursorPosition;
+  }
+
+  public void getTile()
+  {
+    // Convert cursor position from world space to cell position
+    Vector3Int cellPosition = tilemap.WorldToCell(cursorPosition);
+
+    // Get the tile at the cell position
+    TileBase tile = tilemap.GetTile(cellPosition);
+
+    if (tile != null)
+    {
+      Debug.Log("Tile coordinate: " + cellPosition.ToString());
+      Debug.Log("Tile name: " + tile.name);
+      // Image panelImage = canvas.GetComponentInChildren<Panel>();
+      UnityEngine.UI.Image panelImage = image.GetComponent<UnityEngine.UI.Image>();
+      Text panelTileNameText = tilename.GetComponent<Text>();
+      Text panelTiledefText = tiledefense.GetComponent<Text>();
+      
+      Tile tileData = tile as Tile; // Cast TileBase to Tile
+      if (tileData != null)
+      {
+        panelImage.sprite = tileData.sprite; // Use sprite property from Tile class with explicit cast
+        panelTileNameText.text = "name : " + tileData.name; // Use name property from Tile class with explicit cast
+        // panelTiledefText.text = "defense : " + tileData.defense; // Use defense property from Tile class with explicit cast
+      }
+    }
   }
 
   public void selectUnit(UnitController unit)
@@ -177,6 +214,7 @@ public class CursorMouvement : MonoBehaviour
   // Update is called once per frame
   void LateUpdate()
   {
+    getTile();
     cursorMouvement();
     // unitSelection();
     var focusedTile = GetfocusedOnTile();
@@ -261,4 +299,5 @@ public class CursorMouvement : MonoBehaviour
       item.showTile();
     }
   }
+
 }

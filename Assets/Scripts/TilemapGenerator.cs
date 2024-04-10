@@ -16,7 +16,7 @@ public class TilemapGenerator : MonoBehaviour
   public int[] mat;
   public Tilemap tilemap;
   public TileBase[] tiles; // Array of tiles corresponding to different terrain types
-                           // Method to generate the Tilemap
+                           // Method to generate the Tilemap 
   public void GenerateTilemap()
   {
     int xm = terrainMap.map.GetLength(0) / 2;
@@ -28,6 +28,8 @@ public class TilemapGenerator : MonoBehaviour
         Terrain terrain = terrainMap.map[x + xm, y + ym];
         Vector3Int tilePosition = new Vector3Int(x, y, 0);
         tilemap.SetTile(tilePosition, tiles[(int)terrain.terrainType]);
+        // Debug.Log("tile coordinate : " + terrain.terrainType.ToString() + " " + x + " " + y);
+        
       }
     }
   }
@@ -54,9 +56,9 @@ public class TilemapGenerator : MonoBehaviour
       }
     }
     GenerateTilemap();
-  //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());
-  // BoundsInt bounds = tilemap.cellBounds;
-  // Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
+    //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());
+    // BoundsInt bounds = tilemap.cellBounds;
+    // Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
   }
 
 }
