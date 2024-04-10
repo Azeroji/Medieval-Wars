@@ -87,7 +87,7 @@ public class Unit
                     renderer.material = transparentGrayMaterial;
                     
                     // Optional: Adjust material properties (e.g., transparency, color)
-                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Gray color with alpha
+                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 1.0f); // Gray color with alpha
                     renderer.material.color = grayColor;
                 }
                 else
