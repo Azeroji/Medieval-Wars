@@ -34,7 +34,9 @@ public class CursorMouvement : MonoBehaviour
 
   public GameObject image;
   public GameObject tilename;
-  public GameObject tiledefense ; 
+  public GameObject tiledefense;
+
+  public GameObject PlayerpanelUI;
 
   private bool isMoving = false;
   void Start()
@@ -106,7 +108,7 @@ public class CursorMouvement : MonoBehaviour
       UnityEngine.UI.Image panelImage = image.GetComponent<UnityEngine.UI.Image>();
       Text panelTileNameText = tilename.GetComponent<Text>();
       Text panelTiledefText = tiledefense.GetComponent<Text>();
-      
+
       Tile tileData = tile as Tile; // Cast TileBase to Tile
       if (tileData != null)
       {
@@ -264,7 +266,10 @@ public class CursorMouvement : MonoBehaviour
     }
     if (path != null && path.Count > 0 && isMoving)
     {
+      //attack wait logic
+      PlayerpanelUI.SetActive(false);
       moveAlongPath();
+
     }
 
   }
@@ -282,6 +287,9 @@ public class CursorMouvement : MonoBehaviour
     {
       getinRangeTiles();
       isMoving = false;
+
+      //attack wait logic
+      PlayerpanelUI.SetActive(true);
 
     }
 
