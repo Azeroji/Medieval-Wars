@@ -83,7 +83,7 @@ public class Unit
                 // Assign the transparent gray material to the objectInstance
                 Material transparentGrayMaterial = Resources.Load<Material>("TransparentGrayMaterial");
                 if (transparentGrayMaterial != null)
-                {
+                {   
                     renderer.material = transparentGrayMaterial;
                     
                     // Optional: Adjust material properties (e.g., transparency, color)

@@ -50,15 +50,15 @@ public class TilemapGenerator : MonoBehaviour {
         terrainMap.map[x, y] = new Terrain(type, 1, 0);
       }
     }
-    terrainMap.map[3,3] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[3,9] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[3,8] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,4] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,5] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,6] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,7] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,8] = new Terrain(TerrainType.Montagne, 2, 0);
-    terrainMap.map[4,9] = new Terrain(TerrainType.Montagne, 2, 0);
+    terrainMap.map[3,3] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[3,9] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[3,8] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,4] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,5] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,6] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,7] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,8] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[4,9] = new Terrain(TerrainType.Montagne, 99, 0);
 
     GenerateTilemap();
   //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());

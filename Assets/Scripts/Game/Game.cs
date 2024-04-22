@@ -21,8 +21,9 @@ public class Game : MonoBehaviour
         playerRed = new Player();
         playerBlue = new Player();
 
-        playerRed.AddUnit(new Guerrier(3,3,Teams.Red));
-        playerRed.AddUnit(new Lancier(2,1,Teams.Red));
+        playerRed.AddUnit(new Guerrier(10,3,Teams.Red));
+        playerRed.AddUnit(new Lancier(9,3,Teams.Red));
+        playerRed.AddUnit(new Lancier(5,8,Teams.Red));
 
         playerBlue.AddUnit(new Guerrier(4,5,Teams.Blue));
 
@@ -63,6 +64,20 @@ public class Game : MonoBehaviour
             }
             return false;
         }
+    }
+
+    public bool isEmpty ( int x, int y ) {
+        foreach ( var unit in playerRed.units ) {
+            if ( unit.posx == x && unit.posy == y ) {
+                return false;
+            }
+        }
+        foreach ( var unit in playerBlue.units ) {
+            if ( unit.posx == x && unit.posy == y ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void endTurn () {

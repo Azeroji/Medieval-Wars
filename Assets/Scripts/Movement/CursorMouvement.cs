@@ -37,6 +37,7 @@ public class CursorMouvement : MonoBehaviour
     Layermask = 1 << layerNumber;
     pathFinder = new PathFinder();
     rangeFinder = new RangeFinder();
+    rangeFinder.game = game;
     arrowTranslator = new ArrowTranslator();
 
   }
@@ -278,6 +279,7 @@ void ClearTileFocus()
     {
       item.hideTile();
     }
+    unit.activeTile.stepCount = 0;
     inRangeTiles = rangeFinder.getTilesInRange(unit.activeTile, range);
     foreach (var item in inRangeTiles)
     {

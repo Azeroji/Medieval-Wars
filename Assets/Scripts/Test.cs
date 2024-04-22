@@ -13,7 +13,7 @@ public class Test : MonoBehaviour
     {
         g1 = new Guerrier(0,1,Teams.Red);
 
-        g2 = new Lancier(4,5,Teams.Blue);
+        g2 = new Lancier(6,3,Teams.Blue);
 
         g3 = new Infirmier(3,8,Teams.Red);
 
