@@ -8,7 +8,7 @@ public class TerrainMap {
         map = new Terrain[x, y];
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                map[i, j] = new Terrain(TerrainType.Plaine, 1, 0);
+                map[i, j] = new Terrain(TerrainType.Plaine, 1, 1);
             }
         }
     }
@@ -50,20 +50,24 @@ public class TilemapGenerator : MonoBehaviour {
         terrainMap.map[x, y] = new Terrain(type, 1, 0);
       }
     }
-    terrainMap.map[3,3] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[3,9] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[3,8] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,4] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,5] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,6] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,7] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,8] = new Terrain(TerrainType.Montagne, 99, 0);
-    terrainMap.map[4,9] = new Terrain(TerrainType.Montagne, 99, 0);
+    terrainMap.map[3,3] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[3,9] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[3,8] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,4] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,5] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,6] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,7] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,8] = new Terrain(TerrainType.Montagne, 2, 4);
+    terrainMap.map[4,9] = new Terrain(TerrainType.Montagne, 2, 4);
+
+    for ( int x = 6; x<=13; x++ ) {
+        for ( int y = 0; y < 10; y++) {
+            terrainMap.map[x,y] = new Terrain(TerrainType.Ocean, 99, 0);
+        }
+    } 
 
     GenerateTilemap();
-  //  Debug.Log("tile coordinate : " + terrainMap.map[6, 4].terrainType.ToString());
-  // BoundsInt bounds = tilemap.cellBounds;
-  // Debug.Log("Bounds: Position: " + bounds.position + ", Size: " + bounds.size);
+
   }
 
 }
