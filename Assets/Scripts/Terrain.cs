@@ -2,11 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum UnitType
 {
-    Infantry,
-    Mech,
-    Air,
-    Cavalry
-
+    Archer,
+    Belier,
+    Catapulte,
+    Cavalier,
+    CavalierRoyal,
+    Charette,
+    Eclaireur,
+    Galere,
+    Guerrier,
+    Infirmier,
+    Lancier,
+    NavireDeTransport,
+    Radeau,
 }
 public enum Team
 {
@@ -31,11 +39,13 @@ public enum TerrainType
     Marais,
     Ocean,
     VillageNeutre,
+
     QgBleu,
     VillageBleu,
     BaraqueBleu,
     PortBleu,
     AtelierBleu,
+
     QgRouge,
     VillageRouge,
     BaraqueRouge,
@@ -47,20 +57,20 @@ public enum TerrainType
 public class Terrain
 {
     public TerrainType terrainType;
-    public Dictionary<UnitType, int> movement;
+    // public Dictionary<UnitType, int> movement;
     public int defenseBonus;//[0-5] Each type of terrain has a defensive rating ranging from 0 to 5 stars ;
 
-    public bool hide;
-    public int inc; // increment the vision
+    public bool hide = false;
+    public int inc = 0; // increment the vision
 
 
     // Add more attributes as needed
-    // public Terrain(TerrainType terrainType, int defenseBonus)
-    // {
-    //     this.terrainType = terrainType;
-    //     this.defenseBonus = defenseBonus;
-    //     // Initialize other attributes here if needed
-    // }
+    public Terrain(TerrainType terrainType, int defenseBonus)
+    {
+        this.terrainType = terrainType;
+        this.defenseBonus = defenseBonus;
+        // Initialize other attributes here if needed
+    }
 }
 
 // Movement Cost from advance wars wiki : 

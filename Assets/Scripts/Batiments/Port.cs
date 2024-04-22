@@ -5,17 +5,35 @@ public class Port : Batiment
 {
     public Port(Team team)
     {
-        terrainType = TerrainType.PortBleu;
-        defenseBonus = 2;
         this.team = team;
+        defenseBonus = 3;
+
+        if (team == Team.blue)
+        {
+            terrainType = TerrainType.PortBleu;
+        }
+        else
+        {
+            terrainType = TerrainType.PortRouge;
+        }
+        
         movement = new Dictionary<UnitType, int>
         {
-            { UnitType.Infantry, 1 },
-            { UnitType.Cavalry, 1 },
-            { UnitType.Mech, 1 }
-        };
+            { UnitType.Guerrier, 1},
+            { UnitType.Lancier, 1},
+            { UnitType.Eclaireur, 1},
+            { UnitType.Infirmier, 1},
+            { UnitType.Charette, 1},
 
-        hide = false;
-        inc = 1;
+            { UnitType.Cavalier, 1},
+            { UnitType.CavalierRoyal, 1},
+            { UnitType.Archer, 1},
+            { UnitType.Catapulte, 1},
+            { UnitType.Belier, 1},
+
+            { UnitType.NavireDeTransport, 1},
+            { UnitType.Galere, 1},
+            { UnitType.Radeau, 1},
+        };
     }
 }

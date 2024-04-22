@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
-public class Baraque : Batiment
+public class Atelier : Batiment
 {
-    public Baraque(Team team)
+    public Atelier(Team team)
     {
         this.team = team;
         defenseBonus = 3;
 
         if (team == Team.blue)
         {
-            terrainType = TerrainType.BaraqueBleu;
+            terrainType = TerrainType.AtelierBleu;
         }
         else
         {
-            terrainType = TerrainType.BaraqueRouge;
+            terrainType = TerrainType.AtelierRouge;
         }
         
         movement = new Dictionary<UnitType, int>

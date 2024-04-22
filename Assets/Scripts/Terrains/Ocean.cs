@@ -2,19 +2,30 @@ using System.Collections.Generic;
 
 public class Ocean : Terrain
 {
+    public static Dictionary<UnitType, int> movement;
+
     public Ocean()
     {
         terrainType = TerrainType.Ocean;
-        defenseBonus = 2;
+        defenseBonus = 0;
 
         movement = new Dictionary<UnitType, int>
         {
-            { UnitType.Infantry, 1 },
-            { UnitType.Cavalry, 1 },
-            { UnitType.Mech, 1 }
-        };
+            { UnitType.Guerrier, 99},
+            { UnitType.Lancier, 99},
+            { UnitType.Eclaireur, 99},
+            { UnitType.Infirmier, 99},
+            { UnitType.Charette, 99},
 
-        hide = false;
-        inc = 1;
+            { UnitType.Cavalier, 99},
+            { UnitType.CavalierRoyal, 99},
+            { UnitType.Archer, 99},
+            { UnitType.Catapulte, 99},
+            { UnitType.Belier, 99},
+
+            { UnitType.NavireDeTransport, 1},
+            { UnitType.Galere, 1},
+            { UnitType.Radeau, 1},
+        };
     }
 }

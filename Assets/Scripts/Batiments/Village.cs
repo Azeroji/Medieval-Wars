@@ -5,17 +5,35 @@ public class Village : Batiment
 {
     public Village(Team team)
     {
-        terrainType = TerrainType.VillageBleu;
-        defenseBonus = 2;
         this.team = team;
+        defenseBonus = 3;
+
+        if (team == Team.blue)
+        {
+            terrainType = TerrainType.VillageBleu;
+        }
+        else
+        {
+            terrainType = TerrainType.VillageRouge;
+        }
+        
         movement = new Dictionary<UnitType, int>
         {
-            { UnitType.Infantry, 1 },
-            { UnitType.Cavalry, 1 },
-            { UnitType.Mech, 1 }
-        };
+            { UnitType.Guerrier, 1},
+            { UnitType.Lancier, 1},
+            { UnitType.Eclaireur, 1},
+            { UnitType.Infirmier, 1},
+            { UnitType.Charette, 1},
 
-        hide = false;
-        inc = 1;
+            { UnitType.Cavalier, 1},
+            { UnitType.CavalierRoyal, 1},
+            { UnitType.Archer, 1},
+            { UnitType.Catapulte, 1},
+            { UnitType.Belier, 1},
+
+            { UnitType.NavireDeTransport, 99},
+            { UnitType.Galere, 99},
+            { UnitType.Radeau, 99},
+        };
     }
 }
