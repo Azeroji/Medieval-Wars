@@ -8,7 +8,6 @@ public class RangeFinder
   public Game game;
     public List<OverlayTileController> getTilesInRange(OverlayTileController startingtile, int range)
   {
-
     var inRangeTiles = new List<OverlayTileController>();
     int totalStepCount = 0;
     inRangeTiles.Add(startingtile); // add the starting tile to the list
@@ -39,7 +38,7 @@ public class RangeFinder
 
             if ( tile1.stepCount <= range ) {
 
-              surroundingTiles.Add(tile1); // get the neighbours of the tiles from the previous step 
+              surroundingTiles.Add(tile1);
 
             }
 

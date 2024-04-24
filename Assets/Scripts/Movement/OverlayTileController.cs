@@ -22,7 +22,7 @@ public class OverlayTileController : MonoBehaviour
   
   void Update()
   {
-    if (Input.GetKeyDown(KeyCode.Space))
+    if (Input.GetKeyDown(KeyCode.L))
     {
       hideTile();
 
@@ -32,7 +32,7 @@ public class OverlayTileController : MonoBehaviour
 
   public void showTile()
   {
-    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+    gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
   }
   public void hideTile()
   {
@@ -53,29 +53,7 @@ public class OverlayTileController : MonoBehaviour
       arrow.color = new Color(1, 1, 1, 1);
       arrow.sprite = arrows[(int)direction];
       arrow.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
-
-
-
-
-
-
-      // if (direction == ArrowDirection.Up)
-      // {
-      //   arrow.sprite = arrows[0];
-      // }
-      // else if (direction == ArrowDirection.Down)
-      // {
-      //   arrow.sprite = arrows[1];
-      // }
-      // else if (direction == ArrowDirection.Left)
-      // {
-      //   arrow.sprite = arrows[2];
-      // }
-      // else if (direction == ArrowDirection.Right)
-      // {
-      //   arrow.sprite = arrows[3];
-      // }
-
     }
   }
 }
+

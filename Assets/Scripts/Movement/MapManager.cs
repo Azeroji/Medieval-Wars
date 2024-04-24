@@ -56,6 +56,7 @@ public class MapManager : MonoBehaviour
         if (tilemap.HasTile(tilelocation) && !map.ContainsKey(tilekey))
         {
           var overlayTile = Instantiate(overlayTileprefab, overlayContainer.transform);
+          overlayTile.hideTile();
           var cellWorldPosition = tilemap.GetCellCenterWorld(tilelocation);
           overlayTile.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y - 0.25f, 0);
           overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tilemap.GetComponent<TilemapRenderer>().sortingOrder;
