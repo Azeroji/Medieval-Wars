@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 938743381}
   - component: {fileID: 938743380}
   - component: {fileID: 938743379}
+  - component: {fileID: 938743382}
   m_Layer: 0
   m_Name: Progress=1
   m_TagString: Untagged
@@ -308,6 +309,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &938743382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938743378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6be07fc4a5666428aa1bf632622216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressbar: {fileID: 938743378}
 --- !u!1 &1062659869
 GameObject:
   m_ObjectHideFlags: 0
