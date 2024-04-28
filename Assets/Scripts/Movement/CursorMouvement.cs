@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 using static ArrowTranslator;
+using TMPro;
 
 public class CursorMouvement : MonoBehaviour
 {
@@ -18,7 +21,7 @@ public class CursorMouvement : MonoBehaviour
   private int Layermask;
   private int layerNumber = 6;
   private UnitController selectedUnit = null; // later on
-  private UnitController unit;
+  private UnitController unit = null;
   public Unit unitObj;
   public GameObject unitPrefab;
 
@@ -31,6 +34,14 @@ public class CursorMouvement : MonoBehaviour
   private List<OverlayTileController> inRangeTiles = new List<OverlayTileController>();
 
   private bool isMoving = false;
+  private bool cursorMove = false;
+
+  public Tilemap tilemap;
+  public GameObject image;
+  public TMP_Text tileName;
+  public TMP_Text tileDefense;
+  // public GameObject PlayerpanelUI;
+
   void Start()
   {
     cursorPosition = transform.position;
@@ -39,47 +50,92 @@ public class CursorMouvement : MonoBehaviour
     rangeFinder = new RangeFinder();
     rangeFinder.game = game;
     arrowTranslator = new ArrowTranslator();
-
+    
   }
+
+  // public void getTile()
+  // {
+  //   // Convert cursor position from world space to cell position
+  //   Vector3Int cellPosition = tilemap.WorldToCell(cursorPosition);
+
+  //   // Get the tile at the cell position
+  //   TileBase tile = tilemap.GetTile(cellPosition);
+
+  //   if (tile != null)
+  //   {
+  //     // Debug.Log("Tile coordinate: " + cellPosition.ToString());
+  //     // Debug.Log("Tile name: " + tile.name);
+  //     // Image panelImage = canvas.GetComponentInChildren<Panel>();
+  //     UnityEngine.UI.Image panelImage = image.GetComponent<UnityEngine.UI.Image>();
+
+  //     Tile tileData = tile as Tile; // Cast TileBase to Tile
+  //     if (tileData != null)
+  //     {
+  //       panelImage.sprite = tileData.sprite; // Use sprite property from Tile class with explicit cast
+  //       tileName.text = ""+TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].terrainType; // Use name property from Tile class with explicit cast
+  //       tileDefense.text = "Def  " + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].defenseBonus; // Use defense property from Tile class with explicit cast
+  //     }
+  //   }
+  // }
+
+
+  public void updatePath ( ) {
+    if ( unit != null ) {
+      Debug.Log("hey");
+      var focusedTile = GetfocusedOnTile();
+      if (focusedTile.HasValue)
+    { 
+            Debug.Log("hey1");
+        GameObject overlayTile = focusedTile.Value.collider.gameObject;
+        if ( path.Contains(overlayTile.GetComponent<OverlayTileController>()) ) {
+            Debug.Log("removed");
+            path.Remove(overlayTile.GetComponent<OverlayTileController>());
+          } else {
+            Debug.Log("added");
+            path.Add(overlayTile.GetComponent<OverlayTileController>());
+        }
+    }
+  }
+
+}
 
   public void cursorMouvement()
   {
     if (Input.GetKeyDown(KeyCode.LeftArrow))
     {
-
       if (cursorPosition.x > -9.51f) //f for float
       {
         cursorPosition.x -= 1;
-
+        cursorMove = true;
       }
     }
     else if (Input.GetKeyDown(KeyCode.RightArrow))
     {
-
       if (cursorPosition.x < 9.49f)
       {
         cursorPosition.x += 1;
-
+        cursorMove = true;
       }
     }
 
     if (Input.GetKeyDown(KeyCode.DownArrow))
     {
-
       if (cursorPosition.y > -4.52f)
       {
         cursorPosition.y -= 1;
-
+        cursorMove = true;
       }
 
     }
     else if (Input.GetKeyDown(KeyCode.UpArrow))
     {
-
       if (cursorPosition.y < 4.42f)
       {
         cursorPosition.y += 1;
+        cursorMove = true;
       }
+    } else {
+      cursorMove = false;
     }
 
     transform.position = cursorPosition;
@@ -119,7 +175,7 @@ public class CursorMouvement : MonoBehaviour
   public void unitSelection()
   {
 
-    if (Input.GetKeyDown(KeyCode.Space))
+    if (Input.GetKeyDown(KeyCode.L))
     {
       // Convert cursor position from world space to screen space
       Vector3 screenPoint = Camera.main.WorldToScreenPoint(cursorPosition);
@@ -179,19 +235,12 @@ public class CursorMouvement : MonoBehaviour
     unit.activeTile = overlayTile;
   }
 
-void ClearTileFocus()
-{
-    foreach (var tile in inRangeTiles)
-    {
-        tile.setArrowSprite(ArrowDirection.None); // Assuming this method resets arrow sprite
-        // Add any other resetting logic here
-    }
-}
 
   // Update is called once per frame
   void LateUpdate()
   {
     cursorMouvement();
+    // getTile();
     // unitSelection();
     var focusedTile = GetfocusedOnTile();
     if (focusedTile.HasValue)
@@ -203,7 +252,11 @@ void ClearTileFocus()
 
       if (inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) && !isMoving)
       {
-        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); // Pass searchableTiles argument
+
+        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); 
+        
+        
+        // Pass searchableTiles argument
         foreach (var item in inRangeTiles)
         {
           item.setArrowSprite(ArrowDirection.None);
@@ -218,22 +271,25 @@ void ClearTileFocus()
         }
       }
 
+      if ( Input.GetKeyDown(KeyCode.K) ) {
+        cancel();
+      }
 
-      if (Input.GetKeyDown(KeyCode.Space))
+
+      if (Input.GetKeyDown(KeyCode.L))
       {
         // Debug.Log("overlaytile : "+overlayTile);
-        overlayTile.GetComponent<OverlayTileController>().showTile();
+        // overlayTile.GetComponent<OverlayTileController>().showTile();
         if (unit == null)
         {
           if ( game.canGetUnit(cursorPosition.x, cursorPosition.y) ) {
-
             unitObj = game.getUnit(cursorPosition.x, cursorPosition.y);
             unit = unitObj.objectInstance.GetComponent<UnitController>();
 
             PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
             getinRangeTiles(game.getUnit(cursorPosition.x, cursorPosition.y).movement);
           } else {
-            Debug.Log("Terrain");
+            Debug.Log("Menu");
           }// Instantiate UnitController instead of Unit
         }
         else
@@ -248,14 +304,36 @@ void ClearTileFocus()
       moveAlongPath();
     } else if ( ( path == null || path.Count <= 0 ) && isMoving ) { 
       isMoving = false;
+      foreach (var item in inRangeTiles)
+        {
+          item.setArrowSprite(ArrowDirection.None);
+        }
       inRangeTiles.Clear();
       unit = null;
     }
 
   }
 
+  private void cancel() {
+    if ( unitObj != null ) {
+      unitObj.hasPlayed = false;
+    }
+    foreach (var item in inRangeTiles)
+    {
+          item.hideTile();
+    }
+    isMoving = false;
+    inRangeTiles.Clear();
+    unit = null;
+  }
+
   private void moveAlongPath()
   {
+    foreach (var item in inRangeTiles)
+    {
+          item.setArrowSprite(ArrowDirection.None);
+    }
+
     var step = speed * Time.deltaTime;
     unit.transform.position = Vector2.MoveTowards(unit.transform.position, path[0].transform.position, step);
     if (Vector2.Distance(unit.transform.position, path[0].transform.position) < 0.001f)
@@ -268,7 +346,6 @@ void ClearTileFocus()
       isMoving = false;
       inRangeTiles.Clear();
       unit = null;
-
     }
 
   }
