@@ -24,6 +24,8 @@ public enum TerrainType {
 public class Terrain {
     public TerrainType terrainType;
     public int movementCost;
+    public int cap;
+    public bool isCapturable = false;
     public int defenseBonus=1;
     // Add more attributes as needed
     public Terrain(TerrainType terrainType, int movementCost, int defenseBonus) {

@@ -16,6 +16,14 @@ public class CursorMouvement : MonoBehaviour
   // Start is called before the first frame update
 
   public Game game;
+  
+
+  public GameObject menuPanel;
+  public GameObject endMenuPanel;
+    private int selectedIndex = 0;
+    private bool menuOpen = false;
+
+    private int selectedUnitIndex = 0;
 
   public Vector3 cursorPosition;
   private int Layermask;
@@ -34,13 +42,34 @@ public class CursorMouvement : MonoBehaviour
   private List<OverlayTileController> inRangeTiles = new List<OverlayTileController>();
 
   private bool isMoving = false;
+  private bool hasMoved = false;
   private bool cursorMove = false;
+  private bool isAttacking = false;
+  private bool endMenuOpen = false;
 
   public Tilemap tilemap;
   public GameObject image;
+  public TMP_Text winText;
   public TMP_Text tileName;
   public TMP_Text tileDefense;
-  // public GameObject PlayerpanelUI;
+   public TMP_Text tileCap;
+    public TMP_Text tileCapText;
+  public GameObject unitBg;
+  public GameObject unitImage;
+  public TMP_Text unitName;
+  public GameObject unitHpImage;
+  public TMP_Text unitHp;
+  public GameObject unitAmmoImage;
+  public TMP_Text unitAmmo;
+  public GameObject unitStaminaImage;
+  public GameObject cursor;
+  public GameObject cursorATK;
+  public TMP_Text unitStamina;
+
+  public TextMeshProUGUI waitText;
+  public TextMeshProUGUI attackText;
+  public TextMeshProUGUI endText;
+
 
   void Start()
   {
@@ -53,30 +82,75 @@ public class CursorMouvement : MonoBehaviour
     
   }
 
-  // public void getTile()
-  // {
-  //   // Convert cursor position from world space to cell position
-  //   Vector3Int cellPosition = tilemap.WorldToCell(cursorPosition);
+  // FUNCTIONS MOVEMENT
 
-  //   // Get the tile at the cell position
-  //   TileBase tile = tilemap.GetTile(cellPosition);
+  public void getTile()
+  {
+    // Convert cursor position from world space to cell position
+    Vector3Int cellPosition = tilemap.WorldToCell(cursorPosition);
 
-  //   if (tile != null)
-  //   {
-  //     // Debug.Log("Tile coordinate: " + cellPosition.ToString());
-  //     // Debug.Log("Tile name: " + tile.name);
-  //     // Image panelImage = canvas.GetComponentInChildren<Panel>();
-  //     UnityEngine.UI.Image panelImage = image.GetComponent<UnityEngine.UI.Image>();
+    // Get the tile at the cell position
+    TileBase tile = tilemap.GetTile(cellPosition);
 
-  //     Tile tileData = tile as Tile; // Cast TileBase to Tile
-  //     if (tileData != null)
-  //     {
-  //       panelImage.sprite = tileData.sprite; // Use sprite property from Tile class with explicit cast
-  //       tileName.text = ""+TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].terrainType; // Use name property from Tile class with explicit cast
-  //       tileDefense.text = "Def  " + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].defenseBonus; // Use defense property from Tile class with explicit cast
-  //     }
-  //   }
-  // }
+    if (tile != null)
+    {
+      // Debug.Log("Tile coordinate: " + cellPosition.ToString());
+      // Debug.Log("Tile name: " + tile.name);
+      // Image panelImage = canvas.GetComponentInChildren<Panel>();
+      UnityEngine.UI.Image panelImage = image.GetComponent<UnityEngine.UI.Image>();
+
+      Tile tileData = tile as Tile; // Cast TileBase to Tile
+
+      if (tileData != null)
+      {
+        panelImage.sprite = tileData.sprite; 
+        tileName.text = ""+TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].terrainType; // Use name property from Tile class with explicit cast
+        tileDefense.text = "" + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].defenseBonus; // Use defense property from Tile class with explicit cast
+        
+        if ( TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].isCapturable ) {
+          tileCap.text = "" + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].cap; 
+      } else {
+        tileCap.enabled = false;
+        tileCapText.enabled = false;
+        }
+      }
+
+      if ( game.isEmptyF(cursorPosition.x, cursorPosition.y) ) {
+        
+        unitAmmo.enabled = false;
+        unitAmmoImage.SetActive(false);
+        unitBg.SetActive(false);
+        unitHp.enabled = false;
+        unitHpImage.SetActive(false);
+        unitImage.SetActive(false);
+        unitName.enabled = false;
+        unitStamina.enabled = false;
+        unitStaminaImage.SetActive(false);
+
+      } else {
+        
+        Unit u = game.getUnitAll(cursorPosition.x, cursorPosition.y);
+        unitAmmo.text = ""+u.ammo;
+        unitHp.text = ""+u.hp;
+        unitName.text = ""+u.unitName;
+        unitStamina.text = ""+u.stamina;
+        UnityEngine.UI.Image uImage = unitImage.GetComponent<UnityEngine.UI.Image>();
+        uImage.sprite = u.sprite;
+
+        unitAmmo.enabled = true;
+        unitAmmoImage.SetActive(true);
+        unitBg.SetActive(true);
+        unitHp.enabled = true;
+        unitHpImage.SetActive(true);
+        unitImage.SetActive(true);
+        unitName.enabled = true;
+        unitStamina.enabled = true;
+        unitStaminaImage.SetActive(true);
+
+      }
+
+    }
+  }
 
 
   public void updatePath ( ) {
@@ -235,86 +309,7 @@ public class CursorMouvement : MonoBehaviour
     unit.activeTile = overlayTile;
   }
 
-
-  // Update is called once per frame
-  void LateUpdate()
-  {
-    cursorMouvement();
-    // getTile();
-    // unitSelection();
-    var focusedTile = GetfocusedOnTile();
-    if (focusedTile.HasValue)
-    {
-      GameObject overlayTile = focusedTile.Value.collider.gameObject;
-      // transform.position = overlayTile.transform.position;
-      // gameObject.GetComponent<SpriteRenderer>().sortingLayerID = overlayTile.GetComponent<SpriteRenderer>().sortingLayerID;
-
-
-      if (inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) && !isMoving)
-      {
-
-        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); 
-        
-        
-        // Pass searchableTiles argument
-        foreach (var item in inRangeTiles)
-        {
-          item.setArrowSprite(ArrowDirection.None);
-        }
-        for (int i = 0; i < path.Count; i++)
-        {
-          var previsousTile = i > 0 ? path[i - 1] : unit.activeTile;
-          var futureTile = i < path.Count - 1 ? path[i + 1] : null;
-          var arrowDir = arrowTranslator.TranslateDirection(previsousTile, path[i], futureTile);
-          path[i].setArrowSprite(arrowDir);
-
-        }
-      }
-
-      if ( Input.GetKeyDown(KeyCode.K) ) {
-        cancel();
-      }
-
-
-      if (Input.GetKeyDown(KeyCode.L))
-      {
-        // Debug.Log("overlaytile : "+overlayTile);
-        // overlayTile.GetComponent<OverlayTileController>().showTile();
-        if (unit == null)
-        {
-          if ( game.canGetUnit(cursorPosition.x, cursorPosition.y) ) {
-            unitObj = game.getUnit(cursorPosition.x, cursorPosition.y);
-            unit = unitObj.objectInstance.GetComponent<UnitController>();
-
-            PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
-            getinRangeTiles(game.getUnit(cursorPosition.x, cursorPosition.y).movement);
-          } else {
-            Debug.Log("Menu");
-          }// Instantiate UnitController instead of Unit
-        }
-        else
-        {
-          isMoving = true;
-        }
-
-      }
-    }
-    if (path != null && path.Count > 0 && isMoving)
-    {
-      moveAlongPath();
-    } else if ( ( path == null || path.Count <= 0 ) && isMoving ) { 
-      isMoving = false;
-      foreach (var item in inRangeTiles)
-        {
-          item.setArrowSprite(ArrowDirection.None);
-        }
-      inRangeTiles.Clear();
-      unit = null;
-    }
-
-  }
-
-  private void cancel() {
+private void cancel() {
     if ( unitObj != null ) {
       unitObj.hasPlayed = false;
     }
@@ -350,6 +345,10 @@ public class CursorMouvement : MonoBehaviour
 
   }
 
+
+
+  
+
   private void getinRangeTiles( int range )
   {
     foreach (var item in inRangeTiles)
@@ -363,4 +362,304 @@ public class CursorMouvement : MonoBehaviour
       item.showTile();
     }
   }
+
+
+  // HANDLE MOVEMENT
+
+  private void handleMovement ( GameObject overlayTile ) {
+
+      if (inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) && !isMoving)
+      {
+
+        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); 
+        
+        
+        // Pass searchableTiles argument
+        foreach (var item in inRangeTiles)
+        {
+          item.setArrowSprite(ArrowDirection.None);
+        }
+        for (int i = 0; i < path.Count; i++)
+        {
+          var previsousTile = i > 0 ? path[i - 1] : unit.activeTile;
+          var futureTile = i < path.Count - 1 ? path[i + 1] : null;
+          var arrowDir = arrowTranslator.TranslateDirection(previsousTile, path[i], futureTile);
+          path[i].setArrowSprite(arrowDir);
+
+        }
+      }
+
+      if ( Input.GetKeyDown(KeyCode.K) ) {
+        cancel();
+      }
+
+
+      if (Input.GetKeyDown(KeyCode.L))
+      {
+
+        if (unit == null)
+        {
+          if ( game.canGetUnit(cursorPosition.x, cursorPosition.y) ) {
+            unitObj = game.getUnit(cursorPosition.x, cursorPosition.y);
+            unit = unitObj.objectInstance.GetComponent<UnitController>();
+
+            PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
+            getinRangeTiles(game.getUnit(cursorPosition.x, cursorPosition.y).movement);
+          } else {
+            endMenuOpen = true;
+          }// Instantiate UnitController instead of Unit
+        }
+        else
+        {
+          isMoving = true;
+        }
+
+      }
+  }
+  
+  private void endMovement ( ) {
+      hasMoved = true;  
+      isMoving = false;
+      foreach (var item in inRangeTiles)
+        {
+          item.setArrowSprite(ArrowDirection.None);
+        }
+      inRangeTiles.Clear();
+      unit = null;
+  }
+
+  // LATE UPDATE 
+
+
+
+  void LateUpdate()
+  {
+
+    winText.enabled = false;
+
+    if ( game.hasRedWon() ) {
+      winText.enabled = true;
+      winText.text = "RED WINS";
+      gameObject.SetActive(false);
+    } else if ( game.hasBlueWon() ) {
+      winText.enabled = true;
+      winText.text = "Blue WINS";
+      gameObject.SetActive(false);
+    }
+
+    if ( !menuOpen && !endMenuOpen ) {
+    
+    cursorATK.SetActive(false);
+    closeEndMenu();
+    CloseMenu();
+    cursorMouvement();
+    getTile();
+
+    var focusedTile = GetfocusedOnTile();
+
+    if (focusedTile.HasValue)
+    {
+
+      GameObject overlayTile = focusedTile.Value.collider.gameObject;
+      handleMovement ( overlayTile );
+
+    }
+    if (path != null && path.Count > 0 && isMoving)
+    {
+
+      hasMoved = true;
+      moveAlongPath();
+
+    } else if ( ( path == null || path.Count <= 0 ) && isMoving ) { 
+      
+      endMovement();
+      
+      } else if ( !isMoving && hasMoved  ) {
+
+      hasMoved = false;
+      menuOpen = true;
+
+      }
+
+    } else if ( menuOpen ) {
+
+      OpenMenu();
+
+  } else if ( endMenuOpen ) {
+
+    endMenuPanel.SetActive(true);
+    endText.enabled = true;
+    cursor.SetActive (true);
+
+    if (Input.GetKeyDown(KeyCode.L)) {
+      game.endTurn();
+      closeEndMenu();
+      endMenuOpen = false;
+    } else if (Input.GetKeyDown(KeyCode.K)){
+      closeEndMenu();
+      endMenuOpen = false;
+    }
+
+
+  }
+
+  }
+
+  private void closeEndMenu ( ) {
+    cursor.SetActive (false);
+    endMenuPanel.SetActive(false);
+    endText.enabled = false;
+  }
+
+  // OPEN MENU
+
+  private void OpenMenu () {
+
+      if ( !isAttacking ) {
+        
+        cursor.SetActive(true);
+        menuPanel.SetActive(true);
+        waitText.enabled = true;
+        if ( game.attackableUnits(unitObj).Count > 0 ) {
+          attackText.enabled = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+              {
+                  ChangeSelection();
+                  UpdateCursorPosition();
+              }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+              {
+                  ChangeSelection();
+                  UpdateCursorPosition();
+              }
+
+              // Handle action when pressing Enter
+        if (Input.GetKeyDown(KeyCode.L))
+              {
+                  ExecuteAction();
+              }
+
+      } else {
+
+          attackFunction();
+
+      }
+
+    }
+
+
+
+
+
+// MENU FUNCTIONS 
+
+
+
+void ChangeSelection()
+    {
+
+        if ( (selectedIndex == 0) && (game.attackableUnits(unitObj).Count > 0) ) {
+            selectedIndex = 1;
+        } else if (selectedIndex == 1 && game.attackableUnits(unitObj).Count > 0) {
+            selectedIndex = 0;
+        }
+
+        // Update the selected button
+    }
+
+
+    void ExecuteAction()
+    {
+        // Execute the action based on the selected index
+        if (selectedIndex == 0)
+        {
+            CloseMenu();
+        }
+        else if (selectedIndex == 1)
+        {
+            ChangeSelection();
+            UpdateCursorPosition();
+            isAttacking = true;
+        }
+    }
+
+  void CloseMenu()
+    {
+        cursor.SetActive(false);
+        menuPanel.SetActive(false);
+        menuOpen = false;
+        waitText.enabled = false;
+        attackText.enabled = false;
+
+    }
+
+void UpdateCursorPosition()
+    {
+        // Set the cursor's position based on the selected index
+        Vector3 targetPosition = Vector3.zero;
+        if (selectedIndex == 0)
+        {
+            targetPosition = new Vector3 (-1.56f, 2.74f, 0);
+        }
+        else if (selectedIndex == 1)
+        {
+            targetPosition = new Vector3 (-1.56f, 1.64f, 0);
+        }
+
+        cursor.transform.position = targetPosition;
+
+        // Show the cursor
+        cursor.SetActive(true);
+    }
+
+// ATTACK FUNCTIONS 
+
+private void attackFunction() {
+
+  cursor.SetActive(false);
+  menuPanel.SetActive(false);
+  waitText.enabled = false;
+  attackText.enabled = false;
+
+  cursorATK.SetActive(true);
+
+  List<Unit> units = game.attackableUnits(unitObj).OrderBy(e => e.posx).ToList();
+
+  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+
+  if (Input.GetKeyDown(KeyCode.DownArrow))
+              {
+                 selectedUnitIndex = (selectedUnitIndex - 1 )%units.Count;
+                 cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+              }
+  else if (Input.GetKeyDown(KeyCode.UpArrow))
+              {
+                 selectedUnitIndex = (selectedUnitIndex + 1 )%units.Count;
+                 cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+              }
+  else if (Input.GetKeyDown(KeyCode.RightArrow))
+              {
+                 selectedUnitIndex = (selectedUnitIndex + 1 )%units.Count;
+                 cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+              }
+  else if (Input.GetKeyDown(KeyCode.LeftArrow))
+              {
+                 selectedUnitIndex = (selectedUnitIndex - 1 )%units.Count;
+                 cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+              }
+          
+              // Handle action when pressing Enter
+  if (Input.GetKeyDown(KeyCode.L))
+              {
+                  unitObj.Attack(units[selectedUnitIndex]);
+                  cursorATK.SetActive(false);
+                  isAttacking = false;
+                  selectedUnitIndex = 0;
+                  CloseMenu();
+              }
+
+}
+
 }

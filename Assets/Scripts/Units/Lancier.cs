@@ -6,7 +6,7 @@ public class Lancier : Unit {
         unitName = "Lancier";
         unitDescription = "";
         hp = 10;
-        baseDamage = 0.95f;
+        baseDamage = 0.75f;
         movement = 2;
         ammo = 3;
         stamina = 70;
@@ -21,6 +21,7 @@ public class Lancier : Unit {
         posy = y;
         //Visually displaying the unit
         unitGameObject = Resources.Load<GameObject>("SPUM/SPUM_Units/Unit0"+((color==Teams.Red)? "15":"14" )) ;
+        sprite = SpriteFromTexture(LoadTextureFromFile(((color==Teams.Red)? "Assets/UnitsPng/Red/Lancier.png":"Assets/UnitsPng/Blue/Lancier.png")));        
         Vector2 vector1 = new Vector2(x-9.5f, y-4.75f);
         SpawnUnit(vector1);
     }

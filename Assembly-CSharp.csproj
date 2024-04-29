@@ -116,7 +116,6 @@
     <Compile Include="Assets\Scripts\Units\Galere.cs" />
     <Compile Include="Assets\Scripts\Teams\Teams.cs" />
     <Compile Include="Assets\SPUM\Sample\Script\PlayerObj.cs" />
-    <Compile Include="Assets\Scripts\Test.cs" />
     <Compile Include="Assets\SPUM\Script\Ect\SpritePos.cs" />
     <Compile Include="Assets\Scripts\Units\NavireDeTransport.cs" />
     <Compile Include="Assets\Scripts\Units\Belier.cs" />
