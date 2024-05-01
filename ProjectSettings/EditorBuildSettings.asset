@@ -8,4 +8,25 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Welcome Scene.unity
+    guid: 0c89e1ef465968843a818bb66ab614b8
+  - enabled: 1
+    path: Assets/Scenes/menu Scene.unity
+    guid: 27ab0589479c5cf4f96216540cf49874
+  - enabled: 1
+    path: Assets/Scenes/onBoardingScene1.unity
+    guid: aefd680a6c033f046801ca30bdc58e36
+  - enabled: 1
+    path: Assets/Scenes/onBoardingScene2.unity
+    guid: 31efda8e335fc784fa732368b82de20d
+  - enabled: 1
+    path: Assets/Scenes/onBoardingScene3.unity
+    guid: 6354802df6e03d94ca20a19a39687a0c
+  - enabled: 1
+    path: Assets/Scenes/onBoardingScene4.unity
+    guid: 7fb6d160601152444ae6f0bd089bbfdf
+  - enabled: 1
+    path: Assets/Scenes/SignIn Scene.unity
+    guid: 808f4dba1146e774ebe23672fd74cc9e
   m_configObjects: {}

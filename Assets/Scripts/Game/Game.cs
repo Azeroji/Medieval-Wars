@@ -32,6 +32,7 @@ public class Game : MonoBehaviour
 
         playerBlue.AddUnit(new Guerrier(4,5,Teams.Blue));
         playerBlue.AddUnit(new Cavalier(5,2,Teams.Blue));
+	playerBlue.AddUnit(new Archer(2,6,Teams.Blue));
 
     }
 

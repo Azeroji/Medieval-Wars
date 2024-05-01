@@ -69,7 +69,7 @@ public class Unit
 
             if ( Defender.hp <= 0 ) {
                 Defender.Die();
-            } else {
+            } else if ( Defender.IsAttackPossible (this ) ) {
                 hp = hp - Defender.TotalAttackDamage(this);
                 if ( hp <= 0 ) {
                     Die();
