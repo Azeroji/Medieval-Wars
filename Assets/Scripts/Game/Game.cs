@@ -26,13 +26,21 @@ public class Game : MonoBehaviour
         playerRed = new Player();
         playerBlue = new Player();
 
+        playerRed.AddUnit(new Lancier(1,2,Teams.Red));
+        playerRed.AddUnit(new Guerrier(1,3,Teams.Red));
         playerRed.AddUnit(new Guerrier(2,3,Teams.Red));
-        playerRed.AddUnit(new Lancier(5,3,Teams.Red));
-        playerRed.AddUnit(new Lancier(5,0,Teams.Red));
+        playerRed.AddUnit(new Cavalier(2,5,Teams.Red));
+        playerRed.AddUnit(new Lancier(3,3,Teams.Red));
+        playerRed.AddUnit(new Archer(4,3,Teams.Red));
+        playerRed.AddUnit(new Eclaireur(4,2,Teams.Red));
 
-        playerBlue.AddUnit(new Guerrier(4,5,Teams.Blue));
-        playerBlue.AddUnit(new Cavalier(5,2,Teams.Blue));
-	playerBlue.AddUnit(new Archer(2,6,Teams.Blue));
+        playerBlue.AddUnit(new Lancier(18,2,Teams.Blue));
+        playerBlue.AddUnit(new Guerrier(18,3,Teams.Blue));
+        playerBlue.AddUnit(new Guerrier(17,3,Teams.Blue));
+        playerBlue.AddUnit(new Cavalier(17,5,Teams.Blue));
+        playerBlue.AddUnit(new Cavalier(17,0,Teams.Blue));
+        playerBlue.AddUnit(new Guerrier(16,3,Teams.Blue));
+        playerBlue.AddUnit(new Eclaireur(15,2,Teams.Blue));
 
     }
 
@@ -81,14 +89,14 @@ public class Game : MonoBehaviour
         if ( currentTurn == Teams.Red ) {
             foreach ( var unit in playerRed.units ) {
                 if ( unit.posx == Mathf.Round(x+9.51f) && unit.posy == Mathf.Round(y+4.58f) ) {
-                    return true && !unit.hasPlayed;
+                    return true && !unit.hasPlayed && unit.isAlive;
                 }
             }
             return false;
         } else {
             foreach ( var unit in playerBlue.units ) {
                 if ( unit.posx == Mathf.Round(x+9.51f) && unit.posy == Mathf.Round(y+4.58f) ) {
-                    return true && !unit.hasPlayed;
+                    return true && !unit.hasPlayed && unit.isAlive;
                 }
             }
             return false;
@@ -97,16 +105,49 @@ public class Game : MonoBehaviour
 
     public bool isEmpty ( int x, int y ) {
         foreach ( var unit in playerRed.units ) {
-            if ( unit.posx == x && unit.posy == y ) {
+            if ( unit.posx == x && unit.posy == y  && unit.isAlive) {
                 return false;
             }
         }
         foreach ( var unit in playerBlue.units ) {
-            if ( unit.posx == x && unit.posy == y ) {
+            if ( unit.posx == x && unit.posy == y  && unit.isAlive) {
                 return false;
             }
         }
         return true;
+    }
+
+    public bool isEmpty ( int x, int y, Unit currentUnit ) {
+        foreach ( var unit in playerRed.units ) {
+            if ( unit.posx == x && unit.posy == y && unit != currentUnit && unit.isAlive) {
+                return false;
+            }
+        }
+        foreach ( var unit in playerBlue.units ) {
+            if ( unit.posx == x && unit.posy == y && unit != currentUnit && unit.isAlive) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool isEmptyTurn ( int x, int y ) {
+        if ( currentTurn == Teams.Blue ) {
+            foreach ( var unit in playerRed.units ) {
+                if ( unit.posx == x && unit.posy == y && unit.isAlive) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            foreach ( var unit in playerBlue.units ) {
+                if ( unit.posx == x && unit.posy == y && unit.isAlive) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
     public bool isEmptyF ( float x, float y ) {
@@ -141,6 +182,10 @@ public class Game : MonoBehaviour
     public List<Unit> attackableUnits ( Unit attacker ) {
 
         List<Unit> units = new List<Unit>();
+
+        if ( attacker.range > 1 && attacker.hasMoved ) {
+            return units;
+        }
 
         Player player = attacker.team == Teams.Red ? playerBlue : playerRed;
 

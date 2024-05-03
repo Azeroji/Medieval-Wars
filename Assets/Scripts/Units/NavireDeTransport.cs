@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class NavireDeTransport : Unit {
     public NavireDeTransport(int x,int y,Teams color)
     {
+        unitType = UnitType.NavireDeTransport;
         unitName = "NavireDeTransport";
         unitDescription = "";
         hp = 10;

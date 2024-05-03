@@ -1,12 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CavalierRoyal : Unit {
     public CavalierRoyal(int x,int y,Teams color)
     {
+        unitType = UnitType.CavalierRoyal;
         unitName = "CavalierRoyal";
         unitDescription = "";
         hp = 10;
-        baseDamage = 1.05f;
+        baseDamage = new Dictionary<UnitType, float>() {{UnitType.Guerrier, 1.05f}, {UnitType.Lancier, 0.95f}, {UnitType.Eclaireur, 1.05f}, {UnitType.Cavalier, 0.85f}, {UnitType.CavalierRoyal, 0.55f}, {UnitType.Charette, 1.05f}, {UnitType.Archer, 1.05f}, {UnitType.Catapulte, 1.05f}, {UnitType.Belier, 1.05f}, {UnitType.Infirmier, 1.05f}, {UnitType.NavireDeTransport, 0.35f}, {UnitType.Radeau, 0.55f}, {UnitType.Galere, 0.10f}};
         movement = 6;
         ammo = 9;
         stamina = 70;

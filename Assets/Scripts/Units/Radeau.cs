@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Radeau : Unit {
     public Radeau(int x,int y,Teams color)
     {
+        unitType = UnitType.Radeau;
         unitName = "Radeau";
         unitDescription = "";
         hp = 10;

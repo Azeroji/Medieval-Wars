@@ -1,12 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Archer : Unit {
     public Archer(int x,int y,Teams color)
     {
+        unitType = UnitType.Archer;
         unitName = "Archer";
         unitDescription = "";
         hp = 10;
-        baseDamage = 0.55f;
+
+        baseDamage = new Dictionary<UnitType, float>() {{UnitType.Guerrier, 0.15f}, {UnitType.Lancier, 0.70f}, {UnitType.Eclaireur, 0.45f}, {UnitType.Cavalier, 0.70f}, {UnitType.CavalierRoyal, 1.05f}, {UnitType.Charette, 0.70f}, {UnitType.Archer, 0.75f}, {UnitType.Catapulte, 0.80f}, {UnitType.Belier, 0.70f}, {UnitType.Infirmier, 0.70f}, {UnitType.NavireDeTransport, 0.55f}, {UnitType.Radeau, 0.65f}, {UnitType.Galere, 0.40f}};
+
         movement = 5;
         ammo = 9;
         stamina = 50;

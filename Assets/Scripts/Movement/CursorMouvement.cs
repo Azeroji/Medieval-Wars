@@ -16,8 +16,9 @@ public class CursorMouvement : MonoBehaviour
   // Start is called before the first frame update
 
   public Game game;
-  
-
+  public bool redWin = false;
+  public bool blueWin = false;
+  public TilemapGenerator tilemapGenerator;  
   public GameObject menuPanel;
   public GameObject endMenuPanel;
     private int selectedIndex = 0;
@@ -26,6 +27,7 @@ public class CursorMouvement : MonoBehaviour
     private int selectedUnitIndex = 0;
 
   public Vector3 cursorPosition;
+  private Vector3 oldPosition;
   private int Layermask;
   private int layerNumber = 6;
   private UnitController selectedUnit = null; // later on
@@ -35,6 +37,7 @@ public class CursorMouvement : MonoBehaviour
 
   private PathFinder pathFinder;
   private List<OverlayTileController> path = new List<OverlayTileController>();
+  private OverlayTileController previousTile;
 
   public float speed = 4f;
   private RangeFinder rangeFinder;
@@ -68,6 +71,7 @@ public class CursorMouvement : MonoBehaviour
 
   public TextMeshProUGUI waitText;
   public TextMeshProUGUI attackText;
+  public TextMeshProUGUI capText;
   public TextMeshProUGUI endText;
 
 
@@ -108,10 +112,12 @@ public class CursorMouvement : MonoBehaviour
         tileDefense.text = "" + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].defenseBonus; // Use defense property from Tile class with explicit cast
         
         if ( TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].isCapturable ) {
-          tileCap.text = "" + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].cap; 
+          tileCap.enabled = true;
+          tileCapText.enabled = true;
+          tileCap.text = "" + TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].capturePoints; 
       } else {
-        tileCap.enabled = false;
-        tileCapText.enabled = false;
+          tileCap.enabled = false;
+          tileCapText.enabled = false;
         }
       }
 
@@ -151,33 +157,11 @@ public class CursorMouvement : MonoBehaviour
 
     }
   }
-
-
-  public void updatePath ( ) {
-    if ( unit != null ) {
-      Debug.Log("hey");
-      var focusedTile = GetfocusedOnTile();
-      if (focusedTile.HasValue)
-    { 
-            Debug.Log("hey1");
-        GameObject overlayTile = focusedTile.Value.collider.gameObject;
-        if ( path.Contains(overlayTile.GetComponent<OverlayTileController>()) ) {
-            Debug.Log("removed");
-            path.Remove(overlayTile.GetComponent<OverlayTileController>());
-          } else {
-            Debug.Log("added");
-            path.Add(overlayTile.GetComponent<OverlayTileController>());
-        }
-    }
-  }
-
-}
-
   public void cursorMouvement()
   {
     if (Input.GetKeyDown(KeyCode.LeftArrow))
     {
-      if (cursorPosition.x > -9.51f) //f for float
+      if (cursorPosition.x > -9) //f for float
       {
         cursorPosition.x -= 1;
         cursorMove = true;
@@ -185,7 +169,7 @@ public class CursorMouvement : MonoBehaviour
     }
     else if (Input.GetKeyDown(KeyCode.RightArrow))
     {
-      if (cursorPosition.x < 9.49f)
+      if (cursorPosition.x < 9)
       {
         cursorPosition.x += 1;
         cursorMove = true;
@@ -194,7 +178,7 @@ public class CursorMouvement : MonoBehaviour
 
     if (Input.GetKeyDown(KeyCode.DownArrow))
     {
-      if (cursorPosition.y > -4.52f)
+      if (cursorPosition.y > -4)
       {
         cursorPosition.y -= 1;
         cursorMove = true;
@@ -203,7 +187,7 @@ public class CursorMouvement : MonoBehaviour
     }
     else if (Input.GetKeyDown(KeyCode.UpArrow))
     {
-      if (cursorPosition.y < 4.42f)
+      if (cursorPosition.y < 4)
       {
         cursorPosition.y += 1;
         cursorMove = true;
@@ -213,6 +197,7 @@ public class CursorMouvement : MonoBehaviour
     }
 
     transform.position = cursorPosition;
+
   }
 
   public void selectUnit(UnitController unit)
@@ -305,7 +290,6 @@ public class CursorMouvement : MonoBehaviour
   {
     unitObj.Move(Mathf.RoundToInt(overlayTile.transform.position.x+9.5f),Mathf.RoundToInt(overlayTile.transform.position.y+4.5f));
     unit.transform.position = new Vector3(overlayTile.transform.position.x, overlayTile.transform.position.y-0.25f + 0.0001f, 0);
-    //unit.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
     unit.activeTile = overlayTile;
   }
 
@@ -324,6 +308,7 @@ private void cancel() {
 
   private void moveAlongPath()
   {
+
     foreach (var item in inRangeTiles)
     {
           item.setArrowSprite(ArrowDirection.None);
@@ -340,14 +325,11 @@ private void cancel() {
     {
       isMoving = false;
       inRangeTiles.Clear();
-      unit = null;
     }
 
   }
 
 
-
-  
 
   private void getinRangeTiles( int range )
   {
@@ -356,12 +338,13 @@ private void cancel() {
       item.hideTile();
     }
     unit.activeTile.stepCount = 0;
-    inRangeTiles = rangeFinder.getTilesInRange(unit.activeTile, range);
+    inRangeTiles = rangeFinder.getTilesInRange(unit.activeTile, range, unitObj.unitType);
     foreach (var item in inRangeTiles)
     {
       item.showTile();
     }
   }
+
 
 
   // HANDLE MOVEMENT
@@ -371,15 +354,39 @@ private void cancel() {
       if (inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) && !isMoving)
       {
 
-        path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles); 
-        
-        
-        // Pass searchableTiles argument
+          if ( path.Count <= unitObj.movement ) {
+
+            if ( ( path.Count == 0 ) ) {
+
+                if ( overlayTile.GetComponent<OverlayTileController>() != unit.activeTile ) {
+                  path.Add(overlayTile.GetComponent<OverlayTileController>());
+                }
+
+            } else if ( overlayTile.GetComponent<OverlayTileController>() != path[path.Count - 1] ) {
+                
+              if ( path.Contains(overlayTile.GetComponent<OverlayTileController>()) || ( overlayTile.GetComponent<OverlayTileController>() == unit.activeTile) ) {
+                
+                path.RemoveAt(path.Count - 1);
+
+              } else if ( overlayTile.GetComponent<OverlayTileController>() != unit.activeTile ) {
+
+                path.Add(overlayTile.GetComponent<OverlayTileController>());
+
+              }
+              
+            }
+
+          } else {
+            path = pathFinder.findPath(unit.activeTile, overlayTile.GetComponent<OverlayTileController>(), inRangeTiles);
+          }
+
+
         foreach (var item in inRangeTiles)
         {
           item.setArrowSprite(ArrowDirection.None);
         }
         for (int i = 0; i < path.Count; i++)
+        
         {
           var previsousTile = i > 0 ? path[i - 1] : unit.activeTile;
           var futureTile = i < path.Count - 1 ? path[i + 1] : null;
@@ -402,16 +409,26 @@ private void cancel() {
           if ( game.canGetUnit(cursorPosition.x, cursorPosition.y) ) {
             unitObj = game.getUnit(cursorPosition.x, cursorPosition.y);
             unit = unitObj.objectInstance.GetComponent<UnitController>();
+            oldPosition = cursorPosition;
 
-            PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>()); // Pass OverlayTileController component instead of GameObject
+            PositionUnitOnTile(overlayTile.GetComponent<OverlayTileController>());
+            previousTile = overlayTile.GetComponent<OverlayTileController>();
+            path.Clear();
             getinRangeTiles(game.getUnit(cursorPosition.x, cursorPosition.y).movement);
           } else {
             endMenuOpen = true;
           }// Instantiate UnitController instead of Unit
         }
-        else
+        else if ( inRangeTiles.Contains(overlayTile.GetComponent<OverlayTileController>()) )
         {
-          isMoving = true;
+          if (game.isEmpty(Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f), unitObj)) {
+            unitObj.UseStamina(path.Count);
+            isMoving = true;
+          } else if ( unitObj != null ) {
+            getinRangeTiles(unitObj.movement);
+          }
+        } else if ( unitObj != null ) {
+          getinRangeTiles(unitObj.movement);
         }
 
       }
@@ -425,7 +442,6 @@ private void cancel() {
           item.setArrowSprite(ArrowDirection.None);
         }
       inRangeTiles.Clear();
-      unit = null;
   }
 
   // LATE UPDATE 
@@ -437,11 +453,11 @@ private void cancel() {
 
     winText.enabled = false;
 
-    if ( game.hasRedWon() ) {
+    if ( game.hasRedWon() || redWin ) {
       winText.enabled = true;
       winText.text = "RED WINS";
       gameObject.SetActive(false);
-    } else if ( game.hasBlueWon() ) {
+    } else if ( game.hasBlueWon() || blueWin ) {
       winText.enabled = true;
       winText.text = "Blue WINS";
       gameObject.SetActive(false);
@@ -506,6 +522,8 @@ private void cancel() {
   }
 
   private void closeEndMenu ( ) {
+    selectedIndex = 0;
+    UpdateCursorPosition();
     cursor.SetActive (false);
     endMenuPanel.SetActive(false);
     endText.enabled = false;
@@ -523,22 +541,36 @@ private void cancel() {
         if ( game.attackableUnits(unitObj).Count > 0 ) {
           attackText.enabled = true;
         }
+        if ( TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].isCapturable && ( unitObj.team != TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].team ) ) {
+          capText.enabled = true;
+        }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
               {
-                  ChangeSelection();
+                  MoveSelection(1);
                   UpdateCursorPosition();
               }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
               {
-                  ChangeSelection();
+                  MoveSelection(-1);
                   UpdateCursorPosition();
               }
 
               // Handle action when pressing Enter
-        if (Input.GetKeyDown(KeyCode.L))
+        else if (Input.GetKeyDown(KeyCode.L))
               {
                   ExecuteAction();
+              }
+        else if (Input.GetKeyDown(KeyCode.K))
+              {
+                cursorPosition = oldPosition;
+                transform.position = oldPosition;
+                selectedIndex = 0;
+                UpdateCursorPosition();
+                PositionUnitOnTile(previousTile);
+                unitObj.hasMoved = false;
+                getinRangeTiles(unitObj.movement);
+                CloseMenu();
               }
 
       } else {
@@ -556,18 +588,21 @@ private void cancel() {
 // MENU FUNCTIONS 
 
 
+void MoveSelection(int direction) {
+        // Calculate next index based on direction
+        int nextIndex = (selectedIndex + direction + 3) % 3;
 
-void ChangeSelection()
-    {
-
-        if ( (selectedIndex == 0) && (game.attackableUnits(unitObj).Count > 0) ) {
-            selectedIndex = 1;
-        } else if (selectedIndex == 1 && game.attackableUnits(unitObj).Count > 0) {
-            selectedIndex = 0;
+        // Check if the next option is available based on boolean variables A and B
+        if ((nextIndex == 1 && !capText.enabled) || (nextIndex == 2 && !attackText.enabled))
+        {
+            // If the next option is not available, skip it and try the next one
+            MoveSelection(direction > 0 ? direction + 1 : direction - 1);
+            return;
         }
 
-        // Update the selected button
-    }
+        selectedIndex = nextIndex;
+
+  }
 
 
     void ExecuteAction()
@@ -575,11 +610,29 @@ void ChangeSelection()
         // Execute the action based on the selected index
         if (selectedIndex == 0)
         {
+            selectedIndex = 0;
+            UpdateCursorPosition();
+            unit = null;
+            unitObj = null;
             CloseMenu();
         }
         else if (selectedIndex == 1)
         {
-            ChangeSelection();
+          selectedIndex = 0;
+          UpdateCursorPosition();
+          int i = unitObj.Capture(tilemapGenerator);
+          if ( i == - 1 ) {
+            redWin = true;
+          } else if ( i == 1 ) {
+            blueWin = true;
+          }
+          unit = null;
+          unitObj = null;
+          CloseMenu();
+        }
+        else if (selectedIndex == 2)
+        {
+            selectedIndex = 0;
             UpdateCursorPosition();
             isAttacking = true;
         }
@@ -592,6 +645,7 @@ void ChangeSelection()
         menuOpen = false;
         waitText.enabled = false;
         attackText.enabled = false;
+        capText.enabled = false;
 
     }
 
@@ -601,11 +655,15 @@ void UpdateCursorPosition()
         Vector3 targetPosition = Vector3.zero;
         if (selectedIndex == 0)
         {
-            targetPosition = new Vector3 (-1.56f, 2.74f, 0);
+            targetPosition = new Vector3 (-1.56f, 2.68f, 0);
         }
         else if (selectedIndex == 1)
         {
-            targetPosition = new Vector3 (-1.56f, 1.64f, 0);
+            targetPosition = new Vector3 (-1.56f, 1.9f, 0);
+        }
+        else if (selectedIndex == 2)
+        {
+            targetPosition = new Vector3 (-1.56f, 1.27f, 0);
         }
 
         cursor.transform.position = targetPosition;
@@ -631,22 +689,22 @@ private void attackFunction() {
 
   if (Input.GetKeyDown(KeyCode.DownArrow))
               {
-                 selectedUnitIndex = (selectedUnitIndex - 1 )%units.Count;
+                 selectedUnitIndex = (selectedUnitIndex - 1 + units.Count )%units.Count;
                  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
               }
   else if (Input.GetKeyDown(KeyCode.UpArrow))
               {
-                 selectedUnitIndex = (selectedUnitIndex + 1 )%units.Count;
+                 selectedUnitIndex = (selectedUnitIndex + 1 + units.Count )%units.Count;
                  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
               }
   else if (Input.GetKeyDown(KeyCode.RightArrow))
               {
-                 selectedUnitIndex = (selectedUnitIndex + 1 )%units.Count;
+                 selectedUnitIndex = (selectedUnitIndex + 1 + units.Count )%units.Count;
                  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
               }
   else if (Input.GetKeyDown(KeyCode.LeftArrow))
               {
-                 selectedUnitIndex = (selectedUnitIndex - 1 )%units.Count;
+                 selectedUnitIndex = (selectedUnitIndex - 1 + units.Count )%units.Count;
                  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
               }
           
@@ -654,6 +712,8 @@ private void attackFunction() {
   if (Input.GetKeyDown(KeyCode.L))
               {
                   unitObj.Attack(units[selectedUnitIndex]);
+                  unitObj = null;
+                  unit = null;
                   cursorATK.SetActive(false);
                   isAttacking = false;
                   selectedUnitIndex = 0;

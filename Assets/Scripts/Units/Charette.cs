@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Charette : Unit {
     public Charette(int x,int y,Teams color)
     {
+        unitType = UnitType.Charette;
         unitName = "Charette";
         unitDescription = "";
         hp = 10;

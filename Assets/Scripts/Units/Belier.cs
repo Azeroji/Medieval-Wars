@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Belier : Unit {
     public Belier(int x,int y,Teams color)
     {
+        unitType = UnitType.Belier;
         unitName = "Belier";
         unitDescription = "";
         hp = 10;

@@ -6,7 +6,7 @@ using UnityEngine;
 public class RangeFinder
 {
   public Game game;
-    public List<OverlayTileController> getTilesInRange(OverlayTileController startingtile, int range)
+    public List<OverlayTileController> getTilesInRange(OverlayTileController startingtile, int range, UnitType unitType)
   {
     var inRangeTiles = new List<OverlayTileController>();
     int totalStepCount = 0;
@@ -22,11 +22,11 @@ public class RangeFinder
 
       foreach (OverlayTileController tile in tileForpreviousStep)
       {
-        if ( tile.stepCount + getMovementCost(startingtile, tile) <= range ) { 
+        if ( tile.stepCount + getMovementCost(startingtile, tile, unitType) <= range ) { 
 
-          if ( getMovementCost(startingtile, tile) < min ) {
+          if ( getMovementCost(startingtile, tile, unitType) < min ) {
 
-            min = getMovementCost(startingtile, tile);
+            min = getMovementCost(startingtile, tile, unitType);
 
           }
 
@@ -34,7 +34,7 @@ public class RangeFinder
           
           foreach (OverlayTileController tile1 in neighbouringTiles) {
 
-            tile1.stepCount = tile.stepCount + getMovementCost(startingtile, tile1);
+            tile1.stepCount = tile.stepCount + getMovementCost(startingtile, tile1, unitType);
 
             if ( tile1.stepCount <= range ) {
 
@@ -65,16 +65,16 @@ public class RangeFinder
   }
 
     // Function to get movement cost for a tile
-    public int getMovementCost(OverlayTileController startingtile, OverlayTileController tile)
+    public int getMovementCost(OverlayTileController startingtile, OverlayTileController tile, UnitType unitType)
     {
         // Assuming terrainMap is accessible here
         int x = tile.grid2Dlocation.x + 10;
         int y = tile.grid2Dlocation.y + 5;
 
-        if ( ( tile != startingtile ) && ( !game.isEmpty (x, y) ) ) {
+        if ( ( tile != startingtile ) && ( !game.isEmptyTurn (x, y) ) ) {
           return 99;
         }
 
-        return TilemapGenerator.terrainMap.map[x,y].movementCost;
+        return TilemapGenerator.terrainMap.map[x,y].movement[unitType];
     }
 }

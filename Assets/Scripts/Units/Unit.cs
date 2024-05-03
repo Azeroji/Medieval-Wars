@@ -1,14 +1,34 @@
 using UnityEngine;
 using System;
 using TMPro;
+using System.Collections.Generic;
+using System.Collections.Generic;
+
+public enum UnitType
+{
+    Archer,
+    Belier,
+    Catapulte,
+    Cavalier,
+    CavalierRoyal,
+    Charette,
+    Eclaireur,
+    Galere,
+    Guerrier,
+    Infirmier,
+    Lancier,
+    NavireDeTransport,
+    Radeau,
+}
 
 public class Unit
 {
     // Variables de base de la classe Unit
+    public UnitType unitType;
     public string unitName;
     public string unitDescription;
     public int hp;
-    public float baseDamage;
+    public Dictionary<UnitType, float> baseDamage = new Dictionary<UnitType, float>();
     public int movement;
     public int ammo;
     public int stamina;
@@ -20,6 +40,7 @@ public class Unit
     public int posx;
     public int posy;
     public bool hasPlayed = false;
+    public bool hasMoved = false;
 
     //Speciales
     public Player owner;
@@ -32,9 +53,9 @@ public class Unit
     public GameObject objectInstance;
     public Sprite sprite;
 
-    public float AttackValue(int IndividualATK = 100, int UniversalATK = 100)
+    public float AttackValue(Unit Defender, int IndividualATK = 100, int UniversalATK = 100)
     {
-        float result = this.baseDamage * IndividualATK / 100.0f * UniversalATK / 100.0f;
+        float result = this.baseDamage[Defender.unitType] * IndividualATK / 100.0f * UniversalATK / 100.0f;
         return Mathf.Max(result, 0);
     }
 
@@ -47,7 +68,7 @@ public class Unit
 
     public int TotalAttackDamage(Unit Defender)
     {
-        float attackValue = this.AttackValue();
+        float attackValue = this.AttackValue(Defender);
         float defenseValue = Defender.DefenseValue();
         float result = hp * attackValue * defenseValue;
         return Mathf.RoundToInt(Mathf.Max(result, 0));
@@ -100,14 +121,61 @@ public class Unit
         DestroyObject.Detruire(objectInstance, 0f);
     }
 
+    public void UseStamina ( int s ) {
+        stamina = ( ( stamina - s ) < 0 ) ? 0 : stamina - s;
+    }
+
     public void Move(int x, int y)
     {
+        
+        if ( posx == x && posy == y ) {
+            hasMoved = false;
+            return;
+        }
+
+        hasMoved = true;
         hasPlayed = true;
         posx = x;
         posy = y;
         
     }
 
+    public int Capture ( TilemapGenerator tilemapGenerator ) {
+
+        int xm = TilemapGenerator.terrainMap.map.GetLength(0)/2;
+        int ym = TilemapGenerator.terrainMap.map.GetLength(1)/2;
+
+        TilemapGenerator.terrainMap.map[posx, posy].capturePoints = ( TilemapGenerator.terrainMap.map[posx, posy].capturePoints - hp < 0 ) ? 0 : TilemapGenerator.terrainMap.map[posx, posy].capturePoints - hp;
+
+        if ( TilemapGenerator.terrainMap.map[posx, posy].capturePoints == 0 ) {
+
+            Terrain terrain = TilemapGenerator.terrainMap.map[posx, posy];
+
+            if ( terrain.category == "Village" ) {
+                ((Village)TilemapGenerator.terrainMap.map[posx, posy]).switchTeam(team);
+                TilemapGenerator.terrainMap.map[posx, posy].capturePoints = 20;
+            } else if ( terrain.category == "Atelier" ) {
+                ((Atelier)TilemapGenerator.terrainMap.map[posx, posy]).switchTeam(team);
+                TilemapGenerator.terrainMap.map[posx, posy].capturePoints = 20;
+            } else if ( terrain.category == "Baraque" ) {
+                ((Baraque)TilemapGenerator.terrainMap.map[posx, posy]).switchTeam(team);
+                TilemapGenerator.terrainMap.map[posx, posy].capturePoints = 20;
+            } else if ( terrain.category == "Port" ) {
+                ((Port)TilemapGenerator.terrainMap.map[posx, posy]).switchTeam(team);
+                TilemapGenerator.terrainMap.map[posx, posy].capturePoints = 20;
+            } else if ( terrain.category == "Qg" ) {
+                return ( team == Teams.Red ? -1 : 1 );
+            }
+
+
+            Vector3Int tilePosition = new Vector3Int(posx-xm, posy-ym, 0);
+            tilemapGenerator.tilemap.SetTile(tilePosition, tilemapGenerator.tiles[(int)TilemapGenerator.terrainMap.map[posx, posy].terrainType]);
+
+        }
+
+        return 0;
+
+    }
 
 
      public void SpawnUnit(Vector2 position)

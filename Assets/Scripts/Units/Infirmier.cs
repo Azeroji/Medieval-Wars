@@ -1,8 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Infirmier : Unit {
     public Infirmier(int x,int y,Teams color)
     {
+        unitType = UnitType.Infirmier;
         unitName = "Infirmier";
         unitDescription = "";
         hp = 10;

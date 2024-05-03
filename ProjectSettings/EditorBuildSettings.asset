@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/onBoardingScene4.unity
     guid: 7fb6d160601152444ae6f0bd089bbfdf
   - enabled: 1
+    path: Assets/Scenes/New Scene 2.unity
+    guid: a0bd39e9313a20e47979843ee31b7f3d
+  - enabled: 1
     path: Assets/Scenes/SignIn Scene.unity
     guid: 808f4dba1146e774ebe23672fd74cc9e
   m_configObjects: {}
