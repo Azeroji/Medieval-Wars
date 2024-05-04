@@ -17,6 +17,7 @@ public class Guerrier : Unit {
         vision = 2;
         cost = 50;
         isPower = false;
+        canCapture = true;
 
         team = color;
         posx = x;

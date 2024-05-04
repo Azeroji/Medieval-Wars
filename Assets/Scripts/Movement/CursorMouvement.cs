@@ -11,9 +11,10 @@ using TMPro;
 
 public class CursorMouvement : MonoBehaviour
 {
-  // [SerializeField] private Rigidbody2D cursorRb;
-  // private float speed = 5f;
-  // Start is called before the first frame update
+
+  public Vector3 targetPos1 = new Vector3 (-1.56f, 2.68f, 0);
+  public Vector3 targetPos2 = new Vector3 (-1.56f, 1.9f, 0);
+  public Vector3 targetPos3 = new Vector3 (-1.56f, 1.27f, 0);
 
   public Game game;
   public bool redWin = false;
@@ -51,12 +52,13 @@ public class CursorMouvement : MonoBehaviour
   private bool endMenuOpen = false;
 
   public Tilemap tilemap;
+  
   public GameObject image;
   public TMP_Text winText;
   public TMP_Text tileName;
   public TMP_Text tileDefense;
-   public TMP_Text tileCap;
-    public TMP_Text tileCapText;
+  public TMP_Text tileCap;
+  public TMP_Text tileCapText;
   public GameObject unitBg;
   public GameObject unitImage;
   public TMP_Text unitName;
@@ -65,10 +67,10 @@ public class CursorMouvement : MonoBehaviour
   public GameObject unitAmmoImage;
   public TMP_Text unitAmmo;
   public GameObject unitStaminaImage;
-  public GameObject cursor;
-  public GameObject cursorATK;
   public TMP_Text unitStamina;
 
+  public GameObject cursor;
+  public GameObject cursorATK;
   public TextMeshProUGUI waitText;
   public TextMeshProUGUI attackText;
   public TextMeshProUGUI capText;
@@ -288,6 +290,18 @@ public class CursorMouvement : MonoBehaviour
 
   private void PositionUnitOnTile(OverlayTileController overlayTile)
   {
+
+    Transform unitRoot = unit.transform.Find("UnitRoot");
+
+    if ( unitRoot == null ) {
+      unitRoot = unit.transform.Find("HorseRoot");
+    }
+
+    if (unitRoot != null) {
+       Animator animator = unitRoot.gameObject.GetComponent<Animator>();
+       animator.SetFloat("RunState", 0f );
+    }
+
     unitObj.Move(Mathf.RoundToInt(overlayTile.transform.position.x+9.5f),Mathf.RoundToInt(overlayTile.transform.position.y+4.5f));
     unit.transform.position = new Vector3(overlayTile.transform.position.x, overlayTile.transform.position.y-0.25f + 0.0001f, 0);
     unit.activeTile = overlayTile;
@@ -314,9 +328,24 @@ private void cancel() {
           item.setArrowSprite(ArrowDirection.None);
     }
 
+    // moving animation 
+
+    Transform unitRoot = unit.transform.Find("UnitRoot");
+
+    if ( unitRoot == null ) {
+      unitRoot = unit.transform.Find("HorseRoot");
+    }
+
+    if (unitRoot != null) {
+       Animator animator = unitRoot.gameObject.GetComponent<Animator>();
+       animator.SetFloat("RunState", 0.5f );
+    }
+
+    // 
+
     var step = speed * Time.deltaTime;
-    unit.transform.position = Vector2.MoveTowards(unit.transform.position, path[0].transform.position, step);
-    if (Vector2.Distance(unit.transform.position, path[0].transform.position) < 0.001f)
+    unit.transform.position = Vector2.MoveTowards(unit.transform.position, new Vector2(path[0].transform.position.x, path[0].transform.position.y-0.25f) , step);
+    if (Vector2.Distance(unit.transform.position, new Vector2(path[0].transform.position.x, path[0].transform.position.y-0.25f)) < 0.001f)
     {
       PositionUnitOnTile(path[0]);
       path.RemoveAt(0);
@@ -541,7 +570,7 @@ private void cancel() {
         if ( game.attackableUnits(unitObj).Count > 0 ) {
           attackText.enabled = true;
         }
-        if ( TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].isCapturable && ( unitObj.team != TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].team ) ) {
+        if ( TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].isCapturable && ( unitObj.team != TilemapGenerator.terrainMap.map[Mathf.RoundToInt(cursorPosition.x+9.51f),Mathf.RoundToInt(cursorPosition.y+4.58f)].team ) && unitObj.canCapture ) {
           capText.enabled = true;
         }
 
@@ -610,6 +639,8 @@ void MoveSelection(int direction) {
         // Execute the action based on the selected index
         if (selectedIndex == 0)
         {
+            unitObj.hasMoved = true;
+            unitObj.hasPlayed = true;
             selectedIndex = 0;
             UpdateCursorPosition();
             unit = null;
@@ -618,6 +649,8 @@ void MoveSelection(int direction) {
         }
         else if (selectedIndex == 1)
         {
+          unitObj.hasMoved = true;
+          unitObj.hasPlayed = true;
           selectedIndex = 0;
           UpdateCursorPosition();
           int i = unitObj.Capture(tilemapGenerator);
@@ -655,15 +688,15 @@ void UpdateCursorPosition()
         Vector3 targetPosition = Vector3.zero;
         if (selectedIndex == 0)
         {
-            targetPosition = new Vector3 (-1.56f, 2.68f, 0);
+            targetPosition = targetPos1;
         }
         else if (selectedIndex == 1)
         {
-            targetPosition = new Vector3 (-1.56f, 1.9f, 0);
+            targetPosition = targetPos2;
         }
         else if (selectedIndex == 2)
         {
-            targetPosition = new Vector3 (-1.56f, 1.27f, 0);
+            targetPosition = targetPos3;
         }
 
         cursor.transform.position = targetPosition;
@@ -683,9 +716,7 @@ private void attackFunction() {
 
   cursorATK.SetActive(true);
 
-  List<Unit> units = game.attackableUnits(unitObj).OrderBy(e => e.posx).ToList();
-
-  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
+  List<Unit> units = game.attackableUnits(unitObj).OrderBy(e => e.posx).ToList();  cursorATK.transform.position = new Vector3( ( units[selectedUnitIndex].posx - 9.5f ), ( units[selectedUnitIndex].posy - 4.5f ) );
 
   if (Input.GetKeyDown(KeyCode.DownArrow))
               {

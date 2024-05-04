@@ -17,6 +17,7 @@ public class CavalierRoyal : Unit {
         vision = 3;
         cost = 50;
         isPower = false;
+        canCapture = false;
         
         team = color;
         posx = x;

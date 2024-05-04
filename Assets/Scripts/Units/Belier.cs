@@ -16,6 +16,7 @@ public class Belier : Unit {
         vision = 1;
         cost = 50;
         isPower = false;
+        canCapture = true;
         
         team = color;
         posx = x;

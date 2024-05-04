@@ -36,6 +36,7 @@ public class Unit
     public int range;
     public int vision;
     public int cost;
+    public bool canCapture;
     //Position
     public int posx;
     public int posy;
@@ -90,7 +91,7 @@ public class Unit
 
             if ( Defender.hp <= 0 ) {
                 Defender.Die();
-            } else if ( Defender.IsAttackPossible (this ) ) {
+            } else if ( Defender.IsAttackPossible(this) ) {
                 hp = hp - Defender.TotalAttackDamage(this);
                 if ( hp <= 0 ) {
                     Die();
@@ -145,7 +146,13 @@ public class Unit
         int xm = TilemapGenerator.terrainMap.map.GetLength(0)/2;
         int ym = TilemapGenerator.terrainMap.map.GetLength(1)/2;
 
-        TilemapGenerator.terrainMap.map[posx, posy].capturePoints = ( TilemapGenerator.terrainMap.map[posx, posy].capturePoints - hp < 0 ) ? 0 : TilemapGenerator.terrainMap.map[posx, posy].capturePoints - hp;
+        int capPoints = hp;
+
+        if ( unitType == UnitType.Belier ) {
+            capPoints = Mathf.RoundToInt(hp * 1.5f);
+        }
+
+        TilemapGenerator.terrainMap.map[posx, posy].capturePoints = ( TilemapGenerator.terrainMap.map[posx, posy].capturePoints - capPoints < 0 ) ? 0 : TilemapGenerator.terrainMap.map[posx, posy].capturePoints - capPoints;
 
         if ( TilemapGenerator.terrainMap.map[posx, posy].capturePoints == 0 ) {
 

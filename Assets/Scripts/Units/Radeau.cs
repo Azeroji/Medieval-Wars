@@ -16,6 +16,7 @@ public class Radeau : Unit {
         vision = 4;
         cost = 50;
         isPower = false;
+        canCapture = false;
         
         team = color;
         posx = x;
