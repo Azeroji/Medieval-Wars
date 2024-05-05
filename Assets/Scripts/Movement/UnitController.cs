@@ -21,7 +21,7 @@ public class UnitController : MonoBehaviour
   public float moveSpeed = 100f;
   public float stopDistance = 0.1f;
   // Start is called before the first frame update
-public OverlayTileController activeTile;
+  public OverlayTileController activeTile;
   void Start()
   {
 
