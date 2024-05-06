@@ -54,6 +54,87 @@ public class Unit
     public GameObject objectInstance;
     public Sprite sprite;
 
+
+    public static int get_unit_cost(UnitType unit) {
+        // Archer
+        if (unit == UnitType.Archer)
+        {  
+            return Archer.cost;     
+        }
+
+        // Belier
+        else if (unit == UnitType.Belier)
+        {
+            return Belier.cost;
+        }
+
+        // Catapulte
+        else if (unit == UnitType.Catapulte)
+        {
+            return Catapulte.cost;
+        }
+
+        // Cavalier
+        else if (unit == UnitType.Cavalier)
+        {
+            return Cavalier.cost;
+        }
+
+        // CavalierRoyal
+        else if (unit == UnitType.CavalierRoyal)
+        {
+            return CavalierRoyal.cost;
+        }
+
+        // Charette
+        else if (unit == UnitType.Charette)
+        {
+            return Charette.cost;
+        }
+
+        // Eclaireur
+        else if (unit == UnitType.Eclaireur)
+        {
+            return Eclaireur.cost;
+        }
+
+        // Galere
+        else if (unit == UnitType.Galere)
+        {
+            return Galere.cost;
+        }
+
+        // Guerrier
+        else if (unit == UnitType.Guerrier)
+        {
+            return Guerrier.cost;
+        }
+
+        // Infirmier
+        else if (unit == UnitType.Infirmier)
+        {
+            return Infirmier.cost;
+        }
+
+        // Lancier
+        else if (unit == UnitType.Lancier)
+        {
+            return Lancier.cost;
+        }
+
+        // NavireDeTransport
+        else if (unit == UnitType.NavireDeTransport)
+        {
+            return NavireDeTransport.cost;
+        }
+
+        // Radeau
+        else if (unit == UnitType.Radeau)
+        {
+            return Radeau.cost;
+        }
+    }
+
     public float AttackValue(Unit Defender, int IndividualATK = 100, int UniversalATK = 100)
     {
         float result = this.baseDamage[Defender.unitType] * IndividualATK / 100.0f * UniversalATK / 100.0f;

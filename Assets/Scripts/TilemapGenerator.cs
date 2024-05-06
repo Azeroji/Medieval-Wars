@@ -15,6 +15,7 @@ public class TerrainMap {
 }
 
 public class TilemapGenerator : MonoBehaviour {
+    public Game game;
     public static TerrainMap terrainMap = new TerrainMap(20,10);
     public Tilemap tilemap;
     public TileBase[] tiles;
@@ -77,6 +78,7 @@ public class TilemapGenerator : MonoBehaviour {
                         break;
                     case TerrainType.VillageBleu:
                         terrainMap.map[x, y] = new Village(Teams.Blue);
+                        game.playerBlue.AddVille(terrainMap.map[x, y]);
                         break;
                     case TerrainType.BaraqueBleu:
                         terrainMap.map[x, y] = new Baraque(Teams.Blue);
@@ -92,6 +94,7 @@ public class TilemapGenerator : MonoBehaviour {
                         break;
                     case TerrainType.VillageRouge:
                         terrainMap.map[x, y] = new Village(Teams.Red);
+                        game.playerRed.AddVille(terrainMap.map[x, y]);
                         break;
                     case TerrainType.BaraqueRouge:
                         terrainMap.map[x, y] = new Baraque(Teams.Red);

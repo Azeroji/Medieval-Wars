@@ -36,6 +36,13 @@ public class Port : Batiment
             { UnitType.Galere, 1},
             { UnitType.Radeau, 1},
         };
+
+        units_produced = [
+            UnitType.Galere,
+            UnitType.NavireDeTransport,
+            UnitType.Radeau,
+        ];
+
     }
 
     public void switchTeam ( Teams team ) {

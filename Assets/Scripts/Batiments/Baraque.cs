@@ -36,6 +36,13 @@ public class Baraque : Batiment
             { UnitType.Galere, 99},
             { UnitType.Radeau, 99},
         };
+
+        units_produced = [
+            UnitType.Archer,
+            UnitType.Cavalier,
+            UnitType.CavalierRoyal,
+            UnitType.Lancier,
+        ];
     }
     public void switchTeam ( Teams team ) {
         this.team = team;

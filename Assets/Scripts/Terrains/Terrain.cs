@@ -28,6 +28,9 @@ public enum TerrainType
 [System.Serializable]
 public class Terrain
 {
+    public int posx;
+    public int posy;
+
     public TerrainType terrainType;
     public Dictionary<UnitType, int> movement = new Dictionary<UnitType, int>();
     public int defenseBonus;//[0-5] Each type of terrain has a defensive rating ranging from 0 to 5 stars ;

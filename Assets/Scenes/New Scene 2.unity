@@ -4397,6 +4397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b8212c89c1b654b9a56908c13afd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  game: {fileID: 1442683676}
   tilemap: {fileID: 450203106}
   tiles:
   - {fileID: 11400000, guid: 96e0e084dd8c4ee40be372c8e82b4dde, type: 2}

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
+    // funds par day
+    const int FUNDS_PAR_VILLE = 500;
     // Reference to the player representing the Red team
     public Player playerRed;
 
@@ -23,8 +25,8 @@ public class Game : MonoBehaviour
 
     void Start ( ) {
         currentDay = 1;
-        playerRed = new Player();
-        playerBlue = new Player();
+        playerRed = new Player(Teams.Red);
+        playerBlue = new Player(Teams.Blue);
 
         playerRed.AddUnit(new Lancier(1,2,Teams.Red));
         playerRed.AddUnit(new Guerrier(1,3,Teams.Red));
@@ -167,8 +169,11 @@ public class Game : MonoBehaviour
     public void endTurn () {
         if ( currentTurn == Teams.Red ) {
             currentTurn = Teams.Blue;
-        } else {
+            playerBlue.funds += playerBlue.villes.Count * FUNDS_PAR_VILLE;
+        }
+        else {
             currentTurn = Teams.Red;
+            playerRed.funds += playerRed.villes.Count * FUNDS_PAR_VILLE;
             currentDay++;
         }
         foreach ( var unit in playerRed.units ) {

@@ -24,6 +24,7 @@ public class CursorMouvement : MonoBehaviour
   public GameObject endMenuPanel;
     private int selectedIndex = 0;
     private bool menuOpen = false;
+    private bool baraqueOpen = false;
 
     private int selectedUnitIndex = 0;
 
@@ -486,7 +487,8 @@ private void cancel() {
       winText.enabled = true;
       winText.text = "RED WINS";
       gameObject.SetActive(false);
-    } else if ( game.hasBlueWon() || blueWin ) {
+    }
+    else if ( game.hasBlueWon() || blueWin ) {
       winText.enabled = true;
       winText.text = "Blue WINS";
       gameObject.SetActive(false);
@@ -501,32 +503,34 @@ private void cancel() {
     getTile();
 
     var focusedTile = GetfocusedOnTile();
-
     if (focusedTile.HasValue)
     {
-
       GameObject overlayTile = focusedTile.Value.collider.gameObject;
       handleMovement ( overlayTile );
 
     }
+    
     if (path != null && path.Count > 0 && isMoving)
     {
 
       hasMoved = true;
       moveAlongPath();
 
-    } else if ( ( path == null || path.Count <= 0 ) && isMoving ) { 
+    }
+    else if ( ( path == null || path.Count <= 0 ) && isMoving ) { 
       
       endMovement();
       
-      } else if ( !isMoving && hasMoved  ) {
+      }
+    else if ( !isMoving && hasMoved  ) {
 
       hasMoved = false;
       menuOpen = true;
 
       }
 
-    } else if ( menuOpen ) {
+    }
+    else if ( menuOpen ) {
 
       OpenMenu();
 
@@ -602,7 +606,8 @@ private void cancel() {
                 CloseMenu();
               }
 
-      } else {
+      }
+      else {
 
           attackFunction();
 
