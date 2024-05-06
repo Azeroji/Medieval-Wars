@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Units\Lancier.cs" />
     <Compile Include="Assets\Scripts\Batiments\Qg.cs" />
     <Compile Include="Assets\Scripts\Units\Eclaireur.cs" />
+    <Compile Include="Assets\Scripts\CanvasController\CanvasController.cs" />
     <Compile Include="Assets\Scripts\Units\Radeau.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_SpriteList.cs" />
     <Compile Include="Assets\SPUM\Sprite_Editor(Beta)\Script\SpriteEyeSync.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\SPUM\Script\SPUM_HorseSpriteList.cs" />
     <Compile Include="Assets\Scripts\Movement\PathFinder.cs" />
     <Compile Include="Assets\Scripts\Units\Unit.cs" />
+    <Compile Include="Assets\Scripts\AttackAnimation\AttackAnimation.cs" />
     <Compile Include="Assets\Scripts\Terrains\Terrain.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_AnimationController.cs" />
     <Compile Include="Assets\Scripts\Co\Co.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Assets\SPUM\Script\Ect\ColorSelect.cs" />
     <Compile Include="Assets\SPUM\Script\Plugin\Moments Recorder\Scripts\Gif\LzwEncoder.cs" />
     <Compile Include="Assets\Scripts\Terrains\Ocean.cs" />
+    <Compile Include="Assets\Scripts\Music\Music.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_Prefabs.cs" />
     <Compile Include="Assets\Scripts\Units\Catapulte.cs" />
     <Compile Include="Assets\SPUM\Script\SPUM_Button.cs" />
