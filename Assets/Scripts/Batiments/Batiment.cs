@@ -4,14 +4,14 @@ using System.Collections.Generic;
 public class Batiment : Terrain
 {
     public bool can_produce = true;
-    public UnitType[] units_produced;
+    public List<UnitType> units_produced = new List<UnitType>();
 
     // produce unit
-    public void produce_unit(Player player, UnitType unit)
+    public bool produce_unit(Player player, UnitType unit)
     {
         // new position of unit produite
-        posx_unit = posx;
-        posy_unit = posy;
+        int posx_unit = posx;
+        int posy_unit = posy;
         
         // produce unit
         // Archer

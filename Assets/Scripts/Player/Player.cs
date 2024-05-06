@@ -6,7 +6,7 @@ public class Player
     public CO co;
 
     // team
-    Teams team;
+    public Teams team;
 
     // funds
     public int funds = 100;

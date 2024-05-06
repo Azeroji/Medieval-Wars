@@ -37,12 +37,10 @@ public class Atelier : Batiment
             { UnitType.Radeau, 99},
         };
 
-        units_produced =
-        [
-            UnitType.Belier,
-            UnitType.Catapulte,
-            UnitType.Charette
-        ];
+        // units produced
+        units_produced.Add(UnitType.Belier);
+        units_produced.Add(UnitType.Catapulte);
+        units_produced.Add(UnitType.Charette);
     }
 
     public void switchTeam ( Teams team ) {

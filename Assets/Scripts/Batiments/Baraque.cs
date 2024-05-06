@@ -37,12 +37,11 @@ public class Baraque : Batiment
             { UnitType.Radeau, 99},
         };
 
-        units_produced = [
-            UnitType.Archer,
-            UnitType.Cavalier,
-            UnitType.CavalierRoyal,
-            UnitType.Lancier,
-        ];
+        // units produced
+        units_produced.Add(UnitType.Archer);
+        units_produced.Add(UnitType.Cavalier);
+        units_produced.Add(UnitType.CavalierRoyal);
+        units_produced.Add(UnitType.Lancier);
     }
     public void switchTeam ( Teams team ) {
         this.team = team;

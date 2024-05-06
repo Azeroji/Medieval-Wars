@@ -35,7 +35,7 @@ public class Unit
     public int staminaPerDay;
     public int range;
     public int vision;
-    public int cost;
+    public static int cost;
     public bool canCapture;
     //Position
     public int posx;
@@ -132,6 +132,12 @@ public class Unit
         else if (unit == UnitType.Radeau)
         {
             return Radeau.cost;
+        }
+
+        // no one
+        else
+        {
+            return 0;
         }
     }
 

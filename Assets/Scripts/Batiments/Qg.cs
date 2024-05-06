@@ -38,11 +38,10 @@ public class Qg : Batiment
             { UnitType.Radeau, 99},
         };
 
-        units_produced = [
-            UnitType.Eclaireur,
-            UnitType.Guerrier,
-            UnitType.Infirmier,
-        ];
+        // units produced
+        units_produced.Add(UnitType.Eclaireur);
+        units_produced.Add(UnitType.Guerrier);
+        units_produced.Add(UnitType.Infirmier);
     }
 
     public void switchTeam ( Teams team ) {
