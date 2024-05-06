@@ -11,21 +11,12 @@ public class AttackAnimation : MonoBehaviour
     public GameObject unitBleu;
     private List<GameObject> list = new List<GameObject>();
     private List<GameObject> listBleu = new List<GameObject>();
-    public TMP_Text countdownTextBleu;
-    public TMP_Text countdownTextRed;
-    public Image hpImageBleu;
-    public Image hpImageRed;
-    public float countdownDurationRed;
-    public float countdownDurationBleu;
     public int hpBleuStart;
     public int hpBleuFin;
     public int hpRedStart;
     public int hpRedFin;
     void Start()
     {
-        StartCoroutine(StartCountdown(hpBleuStart, hpBleuFin, countdownTextBleu, hpImageBleu));
-        StartCoroutine(StartCountdown(hpRedStart, hpRedFin, countdownTextRed, hpImageRed));
-
 
         for (int i = 0; i < hpRedStart; i++)
         {
@@ -63,30 +54,35 @@ public class AttackAnimation : MonoBehaviour
                 }
             }
         }
+
+
+
         for (int i = 0; i < hpBleuStart; i++)
         {
 
+            Quaternion rotation = Quaternion.AngleAxis(180f, Vector3.up);
+
             if (i < 4)
             {
-                list.Add(GameObject.Instantiate(unitBleu, new Vector3(-7, i - 2, 0), Quaternion.identity));
+                listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-7, i - 2, 0), rotation));
             }
             else
             {
                 if (i < 7)
                 {
-                    list.Add(GameObject.Instantiate(unitBleu, new Vector3(-5, i - 5.5f, 0), Quaternion.identity));
+                    listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-5, i - 5.5f, 0), rotation));
 
                 }
                 else if (i < 9)
                 {
                     if (i == 7)
                     {
-                        list.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, -0.5f, 0), Quaternion.identity));
+                        listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, -0.5f, 0), rotation));
 
                     }
                     if (i == 8)
                     {
-                        list.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, 0.5f, 0), Quaternion.identity));
+                        listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, 0.5f, 0), rotation));
 
                     }
 
@@ -94,27 +90,32 @@ public class AttackAnimation : MonoBehaviour
                 }
                 else
                 {
-                    list.Add(GameObject.Instantiate(unitBleu, new Vector3(-1, 0, 0), Quaternion.identity));
+                    listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-1, 0, 0), rotation));
 
                 }
             }
 
         }
-        animateDeffacnce();
-        aniamteAttack();
 
 
     }
 
-    public void aniamteAttack()
+    void Update ( ) {
+
+        animateAttack();
+        animateDefense();
+        
+    }
+
+    public void animateAttack()
     {
+
         int i = hpRedStart;
 
-        // Random rnd = new Random();
         foreach (GameObject item in list)
         {
 
-            item.transform.position = Vector2.MoveTowards(item.transform.position, new Vector2(-5, item.transform.position.y), 0.025f);
+            item.transform.position = Vector2.MoveTowards(item.transform.position, new Vector2(0.5f, item.transform.position.y), 0.025f);
 
             Transform unitRoot = item.transform.Find("UnitRoot");
 
@@ -127,24 +128,28 @@ public class AttackAnimation : MonoBehaviour
             {
                 Animator animator = unitRoot.gameObject.GetComponent<Animator>();
                 animator.SetFloat("RunState", 0.5f);
-                animator.SetTrigger("Attack");
-                if (i > hpRedFin)
-                {
-                    animator.SetTrigger("Die");
-                }
 
+                if ( item.transform.position == new Vector3(0.5f, item.transform.position.y,0) ) {
+
+                if (i > hpRedFin) {
+                    animator.SetTrigger("Die");
+                    }
+                else {
+                    animator.SetTrigger("Attack");
+                    }                    
+                }
             }
             i--;
         }
 
     }
-    public void animateDeffacnce()
+    public void animateDefense()
     {
         int i = hpBleuStart;
         foreach (GameObject item in listBleu)
         {
 
-            item.transform.position = Vector2.MoveTowards(item.transform.position, new Vector2(-5, item.transform.position.y), 0.025f);
+            item.transform.position = Vector2.MoveTowards(item.transform.position, new Vector2(-0.5f, item.transform.position.y), 0.025f);
 
             Transform unitRoot = item.transform.Find("UnitRoot");
 
@@ -157,16 +162,22 @@ public class AttackAnimation : MonoBehaviour
             {
                 Animator animator = unitRoot.gameObject.GetComponent<Animator>();
                 animator.SetFloat("RunState", 0.5f);
-                animator.SetTrigger("Attack");
-                if (i > hpBleuFin)
-                {
-                    animator.SetTrigger("Die");
-                }
 
+                if ( item.transform.position == new Vector3(-0.5f, item.transform.position.y,0) ) {
+                
+                if (i > hpBleuFin) {
+                    animator.SetTrigger("Die");
+                    }
+                else {
+                    animator.SetTrigger("Attack");
+                    } 
+                    
+                }
             }
             i--;
         }
     }
+
     IEnumerator StartCountdown(float hpStart, float hpFin, TMP_Text textCountdown, Image img)
     {
         float timer = hpStart;
