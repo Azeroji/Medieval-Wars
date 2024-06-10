@@ -21,11 +21,14 @@ public class AttackAnimation : MonoBehaviour
     public int hpBleuFin;
     public int hpRedStart;
     public int hpRedFin;
+
+    public Teams teamAttack;
     void Start()
     {
         StartCoroutine(StartCountdown(hpBleuStart, hpBleuFin, countdownTextBleu, hpImageBleu));
         StartCoroutine(StartCountdown(hpRedStart, hpRedFin, countdownTextRed, hpImageRed));
-
+        unitBleu.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        unit.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
         for (int i = 0; i < hpRedStart; i++)
         {
@@ -46,7 +49,6 @@ public class AttackAnimation : MonoBehaviour
                     if (i == 7)
                     {
                         list.Add(GameObject.Instantiate(unit, new Vector3(3, -0.5f, 0), Quaternion.identity));
-
                     }
                     if (i == 8)
                     {
@@ -68,25 +70,25 @@ public class AttackAnimation : MonoBehaviour
 
             if (i < 4)
             {
-                list.Add(GameObject.Instantiate(unitBleu, new Vector3(-7, i - 2, 0), Quaternion.identity));
+                listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-7, i - 2, 0), Quaternion.Euler(0, 180, 0)));
             }
             else
             {
                 if (i < 7)
                 {
-                    list.Add(GameObject.Instantiate(unitBleu, new Vector3(-5, i - 5.5f, 0), Quaternion.identity));
+                    listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-5, i - 5.5f, 0), Quaternion.Euler(0, 180, 0)));
 
                 }
                 else if (i < 9)
                 {
                     if (i == 7)
                     {
-                        list.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, -0.5f, 0), Quaternion.identity));
+                        listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, -0.5f, 0), Quaternion.Euler(0, 180, 0)));
 
                     }
                     if (i == 8)
                     {
-                        list.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, 0.5f, 0), Quaternion.identity));
+                        listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-3, 0.5f, 0), Quaternion.Euler(0, 180, 0)));
 
                     }
 
@@ -94,7 +96,7 @@ public class AttackAnimation : MonoBehaviour
                 }
                 else
                 {
-                    list.Add(GameObject.Instantiate(unitBleu, new Vector3(-1, 0, 0), Quaternion.identity));
+                    listBleu.Add(GameObject.Instantiate(unitBleu, new Vector3(-1, 0, 0), Quaternion.Euler(0, 180, 0)));
 
                 }
             }
@@ -126,8 +128,8 @@ public class AttackAnimation : MonoBehaviour
             if (unitRoot != null)
             {
                 Animator animator = unitRoot.gameObject.GetComponent<Animator>();
-                animator.SetFloat("RunState", 0.5f);
-                animator.SetTrigger("Attack");
+                animate(animator);
+
                 if (i > hpRedFin)
                 {
                     animator.SetTrigger("Die");
@@ -156,8 +158,9 @@ public class AttackAnimation : MonoBehaviour
             if (unitRoot != null)
             {
                 Animator animator = unitRoot.gameObject.GetComponent<Animator>();
-                animator.SetFloat("RunState", 0.5f);
-                animator.SetTrigger("Attack");
+
+                animate(animator);
+
                 if (i > hpBleuFin)
                 {
                     animator.SetTrigger("Die");
@@ -167,6 +170,18 @@ public class AttackAnimation : MonoBehaviour
             i--;
         }
     }
+    IEnumerator animate(Animator animator)
+    {
+        int i = 0;
+        while (i < 5)
+        {
+            animator.SetFloat("RunState", 0.5f);
+            animator.SetTrigger("Attack");
+            yield return new WaitForSeconds(0.5f);
+            i++;
+        }
+
+    }
     IEnumerator StartCountdown(float hpStart, float hpFin, TMP_Text textCountdown, Image img)
     {
         float timer = hpStart;
@@ -175,7 +190,7 @@ public class AttackAnimation : MonoBehaviour
         {
             textCountdown.text = Mathf.CeilToInt(timer).ToString();
             img.rectTransform.sizeDelta = new Vector2(width, 70);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             timer -= 1f;
             width -= 50f;
 
